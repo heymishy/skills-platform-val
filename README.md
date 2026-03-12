@@ -6,6 +6,122 @@ Designed to work for a single developer shipping a small feature and equally for
 
 ---
 
+## Pipeline flow
+
+```mermaid
+flowchart TD
+    START([Start session]) --> WF
+
+    WF["/workflow\nPipeline navigator"]
+    WF --> RT{What type\nof work?}
+
+    RT -->|Bug / small fix /\nbounded refactor| ST_TP
+    RT -->|New feature /\nuser-facing scope| DISC
+    RT -->|Unknown blocking\nprogress| SPIKE
+    RT -->|Large programme /\nmigration / rewrite| PROG
+
+    %% ─── SHORT TRACK ───────────────────────────────────────────
+    subgraph SHORT["⚡ Short Track"]
+        ST_TP["/test-plan\nWrite failing tests"]
+        ST_DOR["/definition-of-ready\nH1–H9 gate check"]
+        ST_CA["Coding agent\nMake tests pass"]
+    end
+    ST_TP --> ST_DOR --> ST_CA
+
+    %% ─── STANDARD PIPELINE ─────────────────────────────────────
+    subgraph STANDARD["📋 Standard Pipeline"]
+        DISC["/discovery\nStructure the problem"]
+        BM["/benefit-metric\nDefine measurable outcomes"]
+        DEF["/definition\nEpics + stories\nStep 1.5: arch constraints scan\nMigration story detection"]
+        REV["/review\nCategories A–E\nQuality gate"]
+        TP["/test-plan\nTechnical tests +\nAC verification script"]
+        DOR["/definition-of-ready\nH1–H9 hard blocks\nCoding agent instructions"]
+        CA["Coding agent\nMake tests pass\nOpen draft PR"]
+        DOD["/definition-of-done\nPost-merge AC coverage"]
+        TR["/trace\nFull chain\ntraceability report"]
+    end
+
+    DISC -->|"Approved"| BM
+    BM -->|"Metrics active"| DEF
+    DEF -->|"Stories written"| REV
+    REV -->|"No HIGH findings"| TP
+    TP -->|"Tests written failing"| DOR
+    DOR -->|"Sign-off complete"| CA
+    CA -->|"PR merged"| DOD
+    DOD --> TR
+
+    %% ─── PROGRAMME TRACK ───────────────────────────────────────
+    subgraph PROGRAMME["🏗️ Programme Track"]
+        PROG["/programme\nWorkstream registration\nDependency mapping\nPhase gates\nConsumer registry"]
+        MR["/metric-review\nRe-baseline metrics\nat phase gates"]
+        WS1["Workstream A\n[standard pipeline]"]
+        WS2["Workstream B\n[standard pipeline]"]
+        WSN["Workstream N…\n[standard pipeline]"]
+        PG{Phase gate}
+    end
+
+    PROG --> WS1 & WS2 & WSN
+    WS1 & WS2 & WSN --> PG
+    PG -->|"All clear"| MR
+    MR -->|"Next phase"| PG
+    PG -->|"Programme complete"| REL
+
+    %% ─── SUPPORTING SKILLS ─────────────────────────────────────
+    subgraph SUPPORT["🔧 Supporting Skills"]
+        SPIKE["/spike\nTimeboxed investigation\nPROCEED / REDESIGN / DEFER"]
+        DEC["/decisions\nLog entry or ADR\nFeature-level + repo-level"]
+        RE["/reverse-engineer\nExtract business rules\nfrom legacy code"]
+    end
+
+    REV -->|"Genuine unknown"| SPIKE
+    DEF -->|"Genuine unknown"| SPIKE
+    SPIKE -->|"PROCEED"| REV
+    SPIKE -->|"REDESIGN"| DEF
+
+    DEC -.->|"Called at any\ndecision point"| STANDARD
+    RE -.->|"Feeds context\ninto discovery"| DISC
+
+    %% ─── RELEASE ───────────────────────────────────────────────
+    subgraph REL_BOX["🚀 Release"]
+        REL["/release\nRelease notes\nChange request\nDeployment checklist\nCompliance bundle\n(regulated/programme)"]
+    end
+
+    DOD -->|"DoD complete"| REL
+    CA -->|"PR merged\n[short track]"| DOD
+
+    %% ─── ARCHITECTURE GOVERNANCE ────────────────────────────────
+    AG[("🏛️ architecture-\nguardrails.md\nPatterns · ADRs\nConstraints")]
+    AG -.->|"Read by"| DEF
+    AG -.->|"Enforced by"| REV
+    AG -.->|"Hard block H9"| DOR
+    AG -.->|"Checked by"| TR
+
+    %% ─── REFERENCE MATERIALS ────────────────────────────────────
+    REF[("📁 reference/\nScoping docs\nBusiness cases\nOKRs")]
+    REF -.->|"Read by"| DISC
+    REF -.->|"Read by"| BM
+    REF -.->|"Read by"| DEF
+
+    %% ─── STYLING ───────────────────────────────────────────────
+    classDef skill fill:#2d6a9f,stroke:#1a4971,color:#fff,rx:6
+    classDef gate fill:#b45309,stroke:#92400e,color:#fff,rx:6
+    classDef agent fill:#166534,stroke:#14532d,color:#fff,rx:6
+    classDef store fill:#4b5563,stroke:#374151,color:#fff
+    classDef support fill:#6d28d9,stroke:#4c1d95,color:#fff,rx:6
+    classDef prog fill:#0f766e,stroke:#0d544c,color:#fff,rx:6
+
+    class DISC,BM,DEF,REV,TP,DOR,DOD,TR,WF skill
+    class ST_TP,ST_DOR skill
+    class DOR,ST_DOR gate
+    class CA,ST_CA agent
+    class AG,REF store
+    class SPIKE,DEC,RE support
+    class PROG,MR,WS1,WS2,WSN prog
+    class REL skill
+```
+
+---
+
 ## How it works
 
 Each skill is a `SKILL.md` file with YAML frontmatter that Copilot uses for automatic invocation. You say a natural phrase — "I have an idea", "review the stories", "is this story ready" — and the right skill activates. Each skill asks clarifying questions, produces a structured artefact, and tells you exactly what to do next.
