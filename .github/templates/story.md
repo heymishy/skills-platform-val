@@ -70,6 +70,25 @@ So that **[observable outcome]**.
 
 [ADR / guardrail / pattern references — or "None identified — checked"]
 
+## Dependencies
+
+<!--
+  Optional for single-team features. Mandatory for programme-track stories.
+  List any upstream stories, workstreams, or external deliverables that must
+  complete before this story can start or proceed past a given stage.
+  
+  If none, write "None" — do not leave blank on programme-track stories.
+  
+  Examples:
+  - "Upstream: cards-account-api workstream must deliver signed-off API contract
+    before this story can proceed past /definition"
+  - "Upstream: Story [slug] must be DoD-complete — this story consumes its output"
+  - "Infrastructure: [environment] must be provisioned by [team] before coding starts"
+-->
+
+- **Upstream:** [Story, workstream, or external deliverable — or "None"]
+- **Downstream:** [What this story unblocks — or "None"]
+
 ## Acceptance Criteria
 
 <!--

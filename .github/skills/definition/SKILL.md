@@ -156,6 +156,22 @@ immediately rather than silently writing it:
 >
 > How do you want to handle it?
 > 1. Add to MVP scope — I'll update the discovery artefact
+
+**Migration story detection:**
+If a story is identified as a data migration, cutover, parallel-run, or consumer
+migration story (not user-facing, driven by data rules or traffic switching):
+
+> ⚠️ **This story type doesn't fit the standard story format.**
+> It looks like a [data migration / cutover / parallel-run / consumer migration] story.
+>
+> Use `migration-story.md` template instead of `story.md` for this story?
+> 1. Yes — use migration-story.md (appropriate for this type)
+> 2. No — keep standard story.md format and I'll adapt the ACs
+>
+> Reply: 1 or 2
+
+If migration story template confirmed: write the story using
+`.github/templates/migration-story.md`.
 > 2. Defer to post-MVP
 > 3. Replace an existing MVP scope item — which one?
 >

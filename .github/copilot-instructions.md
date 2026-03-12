@@ -49,6 +49,13 @@ Step  Skill                  Entry condition                     Exit condition
 **Short-track** (bugs, small fixes, bounded refactors): 
 `/test-plan → /definition-of-ready → coding agent`
 
+**Programme track** (multi-team, multi-phase, migrations, rewrites):
+`/programme → [per workstream: standard pipeline] → /metric-review at phase gates`
+
+Migration, cutover, and consumer migration stories within any workstream use
+`migration-story.md` instead of `story.md`. Use `/release` with compliance bundle
+option for regulated or phase-gate releases.
+
 ---
 
 ## Templates
@@ -77,6 +84,8 @@ Skills reference these templates — do not embed format definitions in skill fi
 | Deployment checklist | `.github/templates/deployment-checklist.md` |
 | Architecture guardrails | `.github/templates/architecture-guardrails.md` |
 | Reference index | `.github/templates/reference-index.md` |
+| Migration story | `.github/templates/migration-story.md` |
+| Consumer registry | `.github/templates/consumer-registry.md` |
 
 When a skill produces a structured artefact, it uses the relevant template.
 When reviewing artefacts, check them against the template — missing fields are findings.

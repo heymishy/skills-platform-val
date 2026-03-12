@@ -65,12 +65,13 @@ Ask this before presenting any pipeline guidance:
 
 > **What type of work is this?**
 >
-> 1. New feature or user-facing scope — full pipeline
+> 1. New feature or user-facing scope — standard pipeline
 > 2. Bug fix with a clear reproduction case — short track
 > 3. Small bounded change, refactor, or dependency update — short track
 > 4. We don't know enough to proceed on something — spike
+> 5. Large initiative, programme, or migration (multi-team / multi-phase) — programme track
 >
-> Reply: 1, 2, 3, or 4
+> Reply: 1, 2, 3, 4, or 5
 
 **If 1 — Standard pipeline:** route to /discovery unless a later stage is already active.
 
@@ -87,6 +88,22 @@ Ask this before presenting any pipeline guidance:
 >
 > /spike will ask you to define the specific question and timebox before any
 > investigation starts. Ready to run /spike? Reply: yes
+
+**If 5 — Programme track:**
+> **Programme track confirmed.**
+>
+> Check for an existing programme artefact at
+> `.github/artefacts/[programme-slug]/programme.md`.
+>
+> If found: run /programme to see cross-workstream health and phase gate status.
+> If not found: run /programme to set up the programme structure first,
+> then run /discovery per workstream.
+>
+> Individual workstreams follow the standard pipeline independently.
+> /programme sits above them — use it for cross-workstream and phase-gate work.
+> Use /metric-review at each phase gate to re-baseline metrics.
+>
+> Ready to run /programme? Reply: yes
 
 ---
 
@@ -106,6 +123,23 @@ Step  Skill                  Entry condition                   Exit condition
 8     /definition-of-done    PR merged                         AC coverage confirmed
 9     /trace                 On-demand or CI trigger           Chain health reported
 ```
+
+**Programme track** (runs above the standard pipeline per workstream):
+
+```
+Step  Skill                  When to use
+────────────────────────────────────────────────────────────────────────────
+P0    /programme             Set up programme structure, workstreams, dependencies
+P1    /programme             Session start for cross-workstream or phase gate work
+P2    /metric-review         At each phase gate, quarterly, or when targets are questioned
+      [standard pipeline]    Per workstream — runs independently after /programme setup
+```
+
+**Migration story variant** (within any workstream definition step):
+When a workstream contains data migration, cutover, or consumer migration stories,
+/definition will offer `migration-story.md` as the template for those specific
+stories. Standard user-facing stories in the same workstream continue to use
+`story.md`.
 
 ---
 

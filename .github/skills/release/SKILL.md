@@ -70,6 +70,51 @@ State what was found before asking:
 
 ---
 
+## Step 1b — Compliance bundle (regulated and programme releases)
+
+> **Is this release part of a regulated, audited, or programme-gated context?**
+> (e.g. cards issuing, PCI-DSS scope, SOX, internal audit, phase gate completion,
+> post-incident remediation, regulatory deadline)
+>
+> 1. Yes — produce a compliance evidence bundle alongside standard release artefacts
+> 2. No — standard release outputs only
+>
+> Reply: 1 or 2
+
+If **1 — Compliance bundle:**
+
+Bundle a reference index of all pipeline artefacts for the stories in scope,
+packaged as an evidence catalogue:
+
+```
+## Compliance Evidence Bundle — [Release name / version]
+
+Prepared: [date]
+Scope: [story / stories]
+Prepared by: [name]
+
+| Evidence type | Artefact | Date | Status |
+|---------------|---------|------|--------|
+| Story definition | .github/artefacts/[feature]/stories/ | [date] | Approved |
+| Review report | .github/artefacts/[feature]/review/ | [date] | PASS Run [N] |
+| Test plan | .github/artefacts/[feature]/test-plans/ | [date] | [n] tests |
+| Verification script | .github/artefacts/[feature]/verification-scripts/ | [date] | |
+| Definition of ready | .github/artefacts/[feature]/dor/ | [date] | PROCEED |
+| Sign-off (if High oversight) | [recorded in DoR artefact] | [date] | [name] |
+| Definition of done | .github/artefacts/[feature]/dod/ | [date] | COMPLETE |
+| Trace report | .github/artefacts/[feature]/trace/ | [date] | HEALTHY |
+```
+
+Save to `.github/artefacts/[feature]/release/[version]-compliance-bundle.md`.
+
+If any artefact is missing from the bundle:
+
+> ⚠️ **Compliance bundle gap: [artefact type] not found for [story].**
+> This must be resolved before the bundle can be treated as complete.
+> Missing artefact must be produced or its absence formally accepted and recorded.
+
+---
+
 ## Step 2 — Confirm the release type
 
 > **What type of release is this?**
