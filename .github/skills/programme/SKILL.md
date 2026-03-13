@@ -26,11 +26,80 @@ triggers:
 
 None. Can run at any point.
 
-On invocation, check whether a programme artefact already exists at
-`.github/artefacts/[programme-slug]/programme.md`:
+On invocation:
 
-- **Exists:** go directly to [Programme health view](#programme-health-view)
-- **Does not exist:** run [Programme setup](#programme-setup)
+1. If a programme artefact **already exists** at `.github/artefacts/[programme-slug]/programme.md` → go directly to [Programme health view](#programme-health-view)
+2. If arriving from `/workflow` route 5 and qualification has already been confirmed → go directly to [Programme setup](#programme-setup)
+3. Otherwise → run [Step 0 — Qualification](#step-0--qualification) first
+
+---
+
+## Step 0 — Qualification
+
+Before setting up a programme, confirm the overhead is justified. Ask the following questions **one at a time**. Stop and redirect to the standard pipeline if the answers don't clear the threshold.
+
+> **Q1 — Teams**
+> How many separate teams will be doing the delivery work?
+> (A team = a group with its own delivery cadence, backlog, and ownership boundary)
+>
+> Reply: number of teams
+
+If the answer is **1 team**:
+> The standard pipeline with multiple epics handles single-team work well.
+> Programme overhead (workstream coordination, dependency mapping, phase gates) is
+> unlikely to add value here.
+>
+> **Recommend:** use the standard pipeline. Run /discovery to begin.
+> If you still want programme structure for governance reasons, reply: proceed anyway
+
+If the answer is **2 or more teams**, continue.
+
+> **Q2 — Cross-team dependencies**
+> Are there hard dependencies between teams — where one team cannot start or
+> complete a stage until another team has delivered a specific artefact, API
+> contract, or piece of infrastructure?
+>
+> Reply: yes / no / not yet known
+
+> **Q3 — Phase gates**
+> Are there formal checkpoints where the programme is assessed by stakeholders,
+> a risk forum, or a regulatory body before proceeding?
+> (e.g. pilot sign-off, limited rollout approval, regulatory submission)
+>
+> Reply: yes / no
+
+> **Q4 — Consumer migration**
+> Does this work involve replacing a shared service or library that other teams
+> depend on, requiring them to migrate to the new version?
+>
+> Reply: yes / no
+
+**Scoring — programme track is justified if any of the following are true:**
+
+| Signal | Threshold |
+|--------|----------|
+| Multiple teams | 2 or more |
+| Cross-team hard dependencies | At least 1 identified or anticipated |
+| Formal phase gates | Required by stakeholder, governance, or regulatory process |
+| Consumer migration | Any downstream consumers who must absorb breaking changes |
+| Timeline | Multi-phase delivery spanning more than one quarter |
+
+If **none** of these apply:
+> This looks like a single-team feature with multiple epics — the standard pipeline
+> is the right fit. Programme overhead would add coordination cost with no benefit.
+>
+> **Recommend:** use the standard pipeline. `/definition` handles multiple epics natively.
+> Reply: standard pipeline — or: proceed with programme anyway
+
+If **one or more** apply:
+> ✅ Programme track confirmed. The coordination overhead is justified by [signal(s)].
+> Proceeding to programme setup.
+
+Record the qualifying signals in the programme artefact.
+
+---
+
+## Programme setup
 
 ---
 

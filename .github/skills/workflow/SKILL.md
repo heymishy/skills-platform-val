@@ -90,18 +90,29 @@ Ask this before presenting any pipeline guidance:
 > investigation starts. Ready to run /spike? Reply: yes
 
 **If 5 — Programme track:**
-> **Programme track confirmed.**
+> Before confirming the programme track, let's check the overhead is justified.
+> Answer these quickly:
+>
+> - **How many teams** are doing the delivery work?
+> - Are there **hard dependencies** between teams (one team blocked on another's output)?
+> - Are there **formal phase gates** (stakeholder sign-off, regulatory approval)?
+> - Does this involve **consumer migration** (replacing a shared library/service with downstream adopters)?
+>
+> If the answer to all of these is "one team / no / no / no" — the standard pipeline
+> with multiple epics is simpler and sufficient. Reply: standard pipeline
+>
+> If any signal applies — programme track is confirmed. /programme will ask these
+> questions in detail during setup and record the qualifying signals.
 >
 > Check for an existing programme artefact at
 > `.github/artefacts/[programme-slug]/programme.md`.
 >
-> If found: run /programme to see cross-workstream health and phase gate status.
-> If not found: run /programme to set up the programme structure first,
-> then run /discovery per workstream.
+> - Found: run /programme → health view
+> - Not found: run /programme → setup (Step 0 qualification → workstream registration)
 >
-> Individual workstreams follow the standard pipeline independently.
-> /programme sits above them — use it for cross-workstream and phase-gate work.
-> Use /metric-review at each phase gate to re-baseline metrics.
+> Each workstream then runs the **full standard pipeline independently** — including
+> the inner coding loop per story. /programme sits above them for cross-workstream
+> health, dependency tracking, and phase gates. Use /metric-review at each phase gate.
 >
 > Ready to run /programme? Reply: yes
 

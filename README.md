@@ -176,9 +176,111 @@ For new features and user-facing scope.
 Support skills throughout: `/tdd`, `/systematic-debugging`, `/implementation-review`
 
 ### Programme track
-For large initiatives, multi-team migrations, library rewrites, and multi-phase programmes. Runs the standard pipeline per workstream with a coordination layer above.
+For large initiatives, multi-team migrations, library rewrites, and multi-phase programmes. Runs the **full standard pipeline per workstream** (including the inner coding loop per story) with a coordination layer above.
+
+**Use the programme track only when at least one of these signals applies:**
+
+| Signal | Threshold |
+|--------|----------|
+| Multiple teams | 2 or more separate delivery teams |
+| Cross-team hard dependencies | One team cannot start until another delivers a specific artefact or contract |
+| Formal phase gates | Stakeholder, governance, or regulatory sign-off required before proceeding |
+| Consumer migration | Shared service or library being replaced with downstream adopters |
+| Multi-phase timeline | Delivery spans more than one quarter with interim checkpoints |
+
+If none of these apply, use the standard pipeline with multiple epics — `/definition` handles that natively without the coordination overhead.
+
 ```
-/programme → [per workstream: standard pipeline] → /metric-review at phase gates
+/programme (setup + qualification) → [per workstream: full standard pipeline] → /metric-review at phase gates
+```
+
+**Programme track — detailed flow:**
+
+```mermaid
+flowchart TD
+
+    %% ─── QUALIFICATION GATE ────────────────────────────────────
+    QUAL["Qualifying questions\nsee criteria below"]
+    QUAL --> QD{Programme\ntrack needed?}
+
+    QD -->|"Single team\nno phase gates\nno cross-team deps"| NOTRACK["Use standard pipeline\nwith multiple epics\n/discovery → ... → /trace"]
+    QD -->|"2+ teams OR\nformal phase gates OR\nconsumer migration"| SETUP
+
+    %% ─── PROGRAMME SETUP ───────────────────────────────────────
+    subgraph SETUP["🏗️ /programme — Setup"]
+        P1["Register workstreams + teams"]
+        P2["Define phase gates + timeline"]
+        P3["Map cross-workstream dependencies"]
+        P4["Consumer registry\n(library/service rewrite only)"]
+        P1 --> P2 --> P3 --> P4
+    end
+
+    P4 --> WS_NOTE["/programme outputs a suggested\nworkstream start order\nbased on dependencies"]
+
+    WS_NOTE --> WSA & WSB
+
+    %% ─── WORKSTREAM A ───────────────────────────────────────────
+    subgraph WSA["Workstream A — full standard pipeline"]
+        direction TB
+        A1["/discovery\n/benefit-metric"]
+        A2["/definition\nepics + stories"]
+        A3["/review\n/test-plan\n/definition-of-ready"]
+        A4["Inner coding loop\nper story:\n/branch-setup → /implementation-plan\n/subagent-execution → /implementation-review\n/verify-completion → /branch-complete"]
+        A5["/definition-of-done\n/trace"]
+        A1 --> A2 --> A3 --> A4 --> A5
+    end
+
+    %% ─── WORKSTREAM B ───────────────────────────────────────────
+    subgraph WSB["Workstream B — full standard pipeline"]
+        direction TB
+        B1["/discovery\n/benefit-metric"]
+        B2["/definition\nepics + stories"]
+        B3["/review\n/test-plan\n/definition-of-ready"]
+        B4["Inner coding loop\nper story"]
+        B5["/definition-of-done\n/trace"]
+        B1 --> B2 --> B3 --> B4 --> B5
+    end
+
+    %% ─── CROSS-WORKSTREAM DEPENDENCY ───────────────────────────
+    DEP(["cross-workstream\ndependency gate\ntracked in /programme"])
+    A2 -.->|"A must produce\nAPI contract"| DEP
+    DEP -.->|"unblocks\nB /definition"| B2
+
+    %% ─── PHASE GATE ─────────────────────────────────────────────
+    A5 & B5 --> PG
+
+    subgraph PGBLOCK["Phase gate cycle"]
+        PG{Phase gate}
+        MR["/metric-review\nre-baseline metrics\nrevise targets if needed"]
+        PG -->|"All criteria met"| MR
+        MR -->|"Start next phase"| PG
+    end
+
+    PG -->|"Programme complete"| REL
+
+    %% ─── RELEASE ────────────────────────────────────────────────
+    REL["/release\nRelease notes\nChange request\nCompliance bundle\n(regulated/migration)"]
+
+    %% ─── HEALTH VIEW ─────────────────────────────────────────────
+    HEALTH["/programme\nHealth view —\ncross-workstream status\nDependency health\nPhase progress"]
+    HEALTH -.->|"can be run\nat any time"| PGBLOCK
+
+    %% ─── STYLING ────────────────────────────────────────────────
+    classDef skill fill:#2d6a9f,stroke:#1a4971,color:#fff
+    classDef inner fill:#166534,stroke:#14532d,color:#fff
+    classDef gate fill:#b45309,stroke:#92400e,color:#fff
+    classDef prog fill:#0f766e,stroke:#0d544c,color:#fff
+    classDef note fill:#374151,stroke:#1f2937,color:#fff
+    classDef redirect fill:#6b7280,stroke:#374151,color:#fff
+
+    class P1,P2,P3,P4 prog
+    class A1,A2,A3,A5,B1,B2,B3,B5 skill
+    class A4,B4 inner
+    class PG gate
+    class MR,HEALTH prog
+    class REL skill
+    class QUAL,WS_NOTE note
+    class NOTRACK redirect
 ```
 
 When in doubt about which track, run `/workflow` — it will route you.
