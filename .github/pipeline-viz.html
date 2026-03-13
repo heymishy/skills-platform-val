@@ -359,10 +359,13 @@ async function loadState() {
     const resp = await fetch(STATE_FILE + '?_=' + Date.now());
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     allData = normalizeData(await resp.json());
-    render();
   } catch (e) {
     showDropZone();
+    return;
   }
+  // render() is outside the fetch catch — a JS render error shows as an error,
+  // not a false "no data" drop zone.
+  try { render(); } catch (re) { showError('render error: ' + re.message + '\n' + re.stack); }
 }
 
 function normalizeData(data) {
@@ -384,11 +387,20 @@ function loadFromText(text) {
     allData = normalizeData(JSON.parse(text));
     const dz = document.getElementById('drop-zone');
     if (dz) dz.remove();
-    render();
+    try { render(); } catch (re) { showError('render error: ' + re.message + '\n' + re.stack); }
   } catch (e) {
-    alert('Could not parse JSON: ' + e.message);
+    showError('parse error: ' + e.message);
   }
 }
+
+function showError(msg) {
+  document.getElementById('board').innerHTML =
+    `<div style="padding:24px;color:var(--red);font-family:monospace;white-space:pre-wrap;font-size:12px"><strong>Error loading visualiser</strong>\n${msg}</div>`;
+}
+
+window.onerror = (msg, src, ln, col, err) => {
+  showError(msg + ' (' + src + ':' + ln + ')' + (err ? '\n' + err.stack : ''));
+};
 
 function readFile(file) {
   const reader = new FileReader();
