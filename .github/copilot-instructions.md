@@ -41,10 +41,20 @@ Step  Skill                  Entry condition                     Exit condition
 4     /review                Stories exist                        No HIGH findings
 5     /test-plan             Review passed (per story)            Tests written (failing)
 6     /definition-of-ready   Tests exist, review passed           Sign-off complete
-7     [coding agent]         DoR sign-off                         PR opened
+7     Inner coding loop      DoR sign-off                         Draft PR opened
+        7a /branch-setup     DoR Proceed: Yes                     Isolated worktree + clean baseline
+        7b /implementation-plan  Worktree ready                   Task plan saved
+        7c /subagent-execution   Plan exists (or /tdd per task)   All tasks complete
+        7d /verify-completion    Tasks done                       All ACs verified, 0 failures
+        7e /branch-complete      Verified                         Draft PR opened
 8     /definition-of-done    PR merged                            AC coverage confirmed
 9     /trace                 On-demand or CI on PR open           Chain health reported
 ```
+
+**Support skills available throughout the inner loop:**
+`/tdd` — RED-GREEN-REFACTOR enforcement per task
+`/systematic-debugging` — 4-phase root cause process when a task is stuck
+`/implementation-review` — spec + quality review between task batches
 
 **Short-track** (bugs, small fixes, bounded refactors): 
 `/test-plan → /definition-of-ready → coding agent`
@@ -118,6 +128,8 @@ All pipeline artefacts are saved to `.github/artefacts/[feature-slug]/`:
     [story-slug]-verification.md
   dor/
     [story-slug]-dor.md
+  plans/
+    [story-slug]-plan.md
   dod/
     [story-slug]-dod.md
   trace/

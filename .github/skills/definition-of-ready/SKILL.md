@@ -173,11 +173,20 @@ conforming to `.github/templates/definition-of-ready-checklist.md`.
 > [If Low:]
 > Assign the story to the coding agent using the instructions block in the DoR artefact.
 >
+> **Inner coding loop order:**
+> 1. /branch-setup — create isolated worktree, verify clean baseline
+> 2. /implementation-plan — write bite-sized task plan from this DoR
+> 3. /subagent-execution (recommended) or /tdd per task
+> 4. /verify-completion — run full test suite + walk through AC verification script
+> 5. /branch-complete — open draft PR (never mark ready for review)
+>
+> Support skills available throughout: /tdd, /systematic-debugging, /implementation-review
+>
 > [If Medium:]
-> Share the DoR artefact with the engineering lead, then assign to the coding agent.
+> Share the DoR artefact with the engineering lead, then begin the inner coding loop above.
 >
 > [If High:]
-> Obtain sign-off from [name], record it in the DoR artefact, then assign.
+> Obtain sign-off from [name], record it in the DoR artefact, then begin the inner coding loop above.
 >
 > After the PR is merged: run /definition-of-done.
 > Reply: understood — or I have a question about the instructions block

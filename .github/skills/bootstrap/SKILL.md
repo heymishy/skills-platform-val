@@ -50,6 +50,18 @@ Check whether `.github/skills/` already exists:
     decisions/SKILL.md            ← ADR + decision log writer
     reverse-engineer/SKILL.md     ← legacy codebase rule extraction + vendor Q&A
     bootstrap/SKILL.md            ← this file
+    spike/SKILL.md                ← timeboxed investigation for genuine unknowns
+    programme/SKILL.md            ← programme-level navigator for multi-team work
+    metric-review/SKILL.md        ← metric re-baselining at phase gates
+    release/SKILL.md              ← release notes, change request, deployment checklist
+    branch-setup/SKILL.md         ← isolated git worktree + clean baseline
+    implementation-plan/SKILL.md  ← bite-sized task plan from DoR artefact
+    tdd/SKILL.md                  ← RED-GREEN-REFACTOR enforcement
+    subagent-execution/SKILL.md   ← dispatch subagent per task with two-stage review
+    implementation-review/SKILL.md ← spec + quality review between task batches
+    verify-completion/SKILL.md    ← evidence gate before claiming done
+    systematic-debugging/SKILL.md ← 4-phase root cause debugging
+    branch-complete/SKILL.md      ← branch completion + draft PR
 
   templates/
     epic.md                       ← canonical epic format (annotated)
@@ -78,7 +90,7 @@ Check whether `.github/skills/` already exists:
     .gitkeep                      ← placeholder so directory is committed
 ```
 
-**Total: 14 skill files + 21 templates + 3 root files + artefacts directory**
+**Total: 23 skill files + 21 templates + 3 root files + artefacts directory**
 
 ---
 
