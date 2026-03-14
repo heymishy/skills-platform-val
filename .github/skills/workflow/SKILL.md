@@ -352,6 +352,14 @@ For each feature in `pipeline-state.json`:
 
 ---
 
+## State update
+
+`/workflow` does not advance pipeline stages itself — it reads artefacts and reconciles `.github/pipeline-state.json` in the **project repository**. See the State file reconciliation section above for the full reconciliation logic.
+
+After each reconciliation run, update the top-level `updated` timestamp to now.
+
+---
+
 ## Tone
 
 Every output ends with a clear action and a Reply prompt.

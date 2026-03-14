@@ -179,3 +179,17 @@ Date: [date]
 >
 > [If any metric at risk or off track:]
 > Consider surfacing this at the next phase gate before proceeding.
+
+---
+
+## State update
+
+Update `.github/pipeline-state.json` in the **project repository** when the metric review is saved:
+
+- For the feature: set `benefitMetricStatus` to reflect the review outcome:
+  - All metrics on track → `"active"`
+  - One or more at risk → `"at-risk"`, set feature `health: "amber"` if not already worse, note in `blocker: "Metric at risk — [metric name]"`
+  - One or more off track → `"off-track"`, set feature `health: "red"`, `blocker: "Metric off track — [metric name] — [response]"`
+  - Targets revised this cycle → `"revised"` (append, do not replace existing status)
+- Set feature `updatedAt: [now]`
+- If programme track: also update the programme entry `health` if the metric status warrants it

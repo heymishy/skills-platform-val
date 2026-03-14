@@ -249,3 +249,15 @@ Always present the outcome as a choice, not a statement:
 - Does not expand scope once the brief is agreed
 - Does not produce PROCEED if done condition was not met — uses DEFER instead
 - Does not continue past the timebox
+
+---
+
+## State update
+
+Update `.github/pipeline-state.json` in the **project repository** at each phase:
+
+- When the spike begins: set the affected feature or story `stage: "spike"`, `health: "green"`, `updatedAt: [now]`
+- **On PROCEED:** restore the feature/story to the stage it was blocked from (e.g. `stage: "definition"`), set `health: "green"`, clear `blocker`, `updatedAt: [now]`
+- **On REDESIGN:** set `health: "amber"`, `blocker: "Spike REDESIGN — [what needs to change]"`, return stage to the pipeline step that needs rework (e.g. `stage: "definition"`), `updatedAt: [now]`
+- **On DEFER:** set `health: "red"`, `blocker: "Spike DEFER — [reason]"`, `stage: "spike"`, `updatedAt: [now]`
+- Save the spike outcome artefact to `.github/artefacts/[feature]/spikes/[spike-slug]-outcome.md`

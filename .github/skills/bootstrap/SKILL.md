@@ -274,3 +274,22 @@ would exceed context limits.
 - Does not create the first feature artefacts — run /workflow for that
 - Does not install APM or any external tooling
 - Does not modify existing skill files — only creates missing ones
+
+---
+
+## State update
+
+Bootstrap creates the initial `.github/pipeline-state.json` in the **project repository** (not the skills repo) as part of scaffolding.
+
+The seed file is an empty but valid structure:
+```json
+{
+  "version": "1",
+  "updated": "[now]",
+  "programmes": [],
+  "features": []
+}
+```
+
+Do not pre-populate features — those are added by `/discovery` as features are defined.
+If the file already exists, do not overwrite it.

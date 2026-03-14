@@ -273,3 +273,16 @@ If Jenkins / CloudBees is configured: add pipeline build URL to deployment steps
 - Does not approve changes — produces documentation for human approval
 - Does not replace a formal risk assessment process
 - Does not create follow-up stories — flags gaps for humans to action
+
+---
+
+## State update
+
+Update `.github/pipeline-state.json` in the **project repository** when release notes are finalised:
+
+- For each story included in the release: set `stage: "released"`, `prStatus: "merged"`, `releaseReady: true`, `updatedAt: [now]`
+- For each story's epic: if all stories in the epic are `stage: "released"`, set epic `status: "complete"`
+- For the feature: if all stories are released, set `stage: "released"`, `health: "green"`, `updatedAt: [now]`
+- If any stories have scope deviations or gaps noted in their DoD: set `health: "amber"` on those stories and note the deviation in `blocker`
+
+**Human action note:** Deployment itself is a human action. After confirming production deployment, clear any remaining `blocker` fields and set `health: "green"` on affected entries.
