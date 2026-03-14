@@ -1396,10 +1396,49 @@ function updateTimestamp() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// AUTO-POLL  (only while a pipeline is actively running)
+// ─────────────────────────────────────────────────────────────────────────────
+const ACTIVE_STAGES = new Set([
+  'branch-setup', 'implementation-plan', 'subagent-execution', 'verify-completion'
+]);
+
+function hasActiveFeature() {
+  if (!allData || !allData.features) return false;
+  return allData.features.some(f => ACTIVE_STAGES.has(f.stage));
+}
+
+let _pollTimer = null;
+let _pollLastTs = null;
+
+async function pollState() {
+  if (!hasActiveFeature()) {
+    clearInterval(_pollTimer);
+    _pollTimer = null;
+    return;
+  }
+  try {
+    const resp = await fetch(STATE_FILE + '?_=' + Date.now());
+    if (!resp.ok) return;
+    const data = await resp.json();
+    if (data.updated && data.updated !== _pollLastTs) {
+      _pollLastTs = data.updated;
+      allData = normalizeData(data);
+      render();
+    }
+  } catch (e) { /* file:// or server unavailable — silently ignore */ }
+}
+
+function startPollingIfActive() {
+  if (_pollTimer || !hasActiveFeature()) return;
+  _pollLastTs = allData && allData.updated ? allData.updated : null;
+  _pollTimer = setInterval(pollState, 10000);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────────────────────────────────────
 initFilters();
-loadState();
+loadState().then(startPollingIfActive);
 </script>
 </body>
 </html>
