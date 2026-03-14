@@ -83,6 +83,31 @@
   }
   .col-body { padding: 8px; display: flex; flex-direction: column; gap: 6px; min-height: 60px; }
 
+  /* active column accent — draws the eye to current work */
+  .col-active    { border-top: 2px solid var(--blue); }
+  .col-active.has-red   { border-top-color: var(--red); }
+  .col-active.has-amber { border-top-color: var(--amber); }
+  .col-active .col-header { color: var(--text); }
+
+  /* completed-stage count badge */
+  .col-count-done { font-size: 10px; color: var(--green); opacity: 0.65; padding: 1px 4px; }
+
+  /* expand/collapse toggle for the done-trail section */
+  .done-section-toggle {
+    width: 100%; background: none; border: 1px dashed var(--border); color: var(--muted);
+    border-radius: 4px; padding: 3px 6px; font-size: 10px; cursor: pointer; text-align: left;
+    margin-top: 2px; font-family: inherit;
+  }
+  .done-section-toggle:hover { color: var(--text); border-color: var(--muted); }
+  .done-cards { display: none; flex-direction: column; gap: 4px; margin-top: 3px; }
+  .done-cards.open { display: flex; }
+
+  /* ghost card for completed stages */
+  .feature-card.done-card {
+    opacity: 0.42; border-left: 2px solid rgba(34,197,94,0.5) !important;
+  }
+  .feature-card.done-card:hover { opacity: 0.72; }
+
   /* ── Feature cards ────────────────────────────────────────────── */
   .feature-card {
     background: var(--surface2); border-radius: 6px;
@@ -399,7 +424,8 @@ let allData = null;
 let activeFilters = { health: '', track: '', team: '', search: '' };
 let openFeatures = new Set();   // feature slugs with expanded card body
 let openEpics    = new Set();   // epic slugs with expanded story list
-let openStories  = new Set();   // story slugs with expanded detail
+let openStories      = new Set();   // story slugs with expanded detail
+let openDoneSections = new Set();   // stage ids with 'completed' section expanded
 let drawerStory  = null;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -563,31 +589,52 @@ function renderBoard(features) {
     return;
   }
 
-  // Group features by stage
-  const byStage = {};
-  STAGES.forEach(s => { byStage[s.id] = []; });
-  features.forEach(f => {
-    const bucket = byStage[f.stage] || byStage['stalled'];
-    bucket.push(f);
-  });
+  // Build a numeric index for each stage so we can determine past vs current.
+  const stageIdx = {};
+  STAGES.forEach((s, i) => { stageIdx[s.id] = i; });
 
-  // Only render stages that have features (or are core stages)
   const coreStages = ['discovery','benefit-metric','definition','review','test-plan',
     'definition-of-ready','subagent-execution','verify-completion','branch-complete',
     'definition-of-done','released'];
   const stagesToShow = STAGES.filter(s =>
-    coreStages.includes(s.id) || byStage[s.id].length > 0);
+    coreStages.includes(s.id) || features.some(f => f.stage === s.id));
 
-  board.innerHTML = stagesToShow.map(s => `
-    <div class="col" data-stage="${s.id}">
+  board.innerHTML = stagesToShow.map(s => {
+    const sIdx   = stageIdx[s.id] ?? 999;
+    // Active: feature is currently AT this stage
+    const active = features.filter(f => f.stage === s.id);
+    // Done:   feature has already passed THROUGH this stage
+    const done   = features.filter(f => (stageIdx[f.stage] ?? 999) > sIdx);
+
+    const hasRed   = active.some(f => f.health === 'red');
+    const hasAmber = active.some(f => f.health === 'amber');
+    const colCls   = active.length > 0
+      ? 'col col-active' + (hasRed ? ' has-red' : hasAmber ? ' has-amber' : '')
+      : 'col';
+    const isDoneOpen = openDoneSections.has(s.id);
+
+    return `
+    <div class="${colCls}" data-stage="${s.id}">
       <div class="col-header">
         <span>${s.label}</span>
-        <span class="col-count">${byStage[s.id].length}</span>
+        <div style="display:flex;gap:4px;align-items:center">
+          ${active.length > 0 ? `<span class="col-count">${active.length}</span>` : ''}
+          ${done.length  > 0 ? `<span class="col-count-done">${done.length}✓</span>` : ''}
+        </div>
       </div>
       <div class="col-body">
-        ${byStage[s.id].map(f => featureCardHTML(f)).join('') || '<div style="color:var(--border);font-size:11px;padding:4px 0">—</div>'}
+        ${active.map(f => featureCardHTML(f)).join('')}
+        ${active.length === 0 && done.length === 0 ? '<div style="color:var(--border);font-size:11px;padding:4px 0">—</div>' : ''}
+        ${done.length > 0 ? `
+          <button class="done-section-toggle" data-action="toggle-done-section" data-stage="${s.id}">
+            ${isDoneOpen ? '▾' : '▸'} ${done.length} completed
+          </button>
+          <div class="done-cards ${isDoneOpen ? 'open' : ''}">
+            ${done.map(f => featureCardDoneHTML(f, s.id)).join('')}
+          </div>` : ''}
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -619,6 +666,51 @@ function featureCardHTML(f) {
       </div>
       ${epics.length > 0 ? `<div class="epic-list">${epics.map(e => epicRowHTML(f.slug, e)).join('')}</div>` : '<div style="font-size:11px;color:var(--muted)">No epics yet</div>'}
     </div>
+  </div>`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// COMPLETED-STAGE TRAIL
+// ─────────────────────────────────────────────────────────────────────────────
+const STAGE_ARTEFACTS = {
+  'discovery':           f => [{ label: '📄 Discovery',     path: `artefacts/${f.slug}/discovery.md` }],
+  'benefit-metric':      f => [{ label: '📊 Benefit metric', path: `artefacts/${f.slug}/benefit-metric.md` }],
+  'definition':          f => [
+    { label: '📋 Decisions', path: `artefacts/${f.slug}/decisions.md` },
+    ...(f.epics||[]).map(e => ({ label: `📦 Epic: ${e.name}`, path: `artefacts/${f.slug}/epics/${e.slug}.md` })),
+  ],
+  'review':              f => (f.epics||[]).flatMap(e => (e.stories||[]).map(s =>
+    ({ label: `🔍 ${s.name}`, path: `artefacts/${f.slug}/review/${s.slug}-review-1.md` }))),
+  'test-plan':           f => (f.epics||[]).flatMap(e => (e.stories||[]).map(s =>
+    ({ label: `🧪 ${s.name}`, path: `artefacts/${f.slug}/test-plans/${s.slug}-test-plan.md` }))),
+  'definition-of-ready': f => (f.epics||[]).flatMap(e => (e.stories||[]).map(s =>
+    ({ label: `✅ ${s.name}`, path: `artefacts/${f.slug}/dor/${s.slug}-dor.md` }))),
+  'implementation-plan': f => (f.epics||[]).flatMap(e => (e.stories||[]).map(s =>
+    ({ label: `🗒 ${s.name}`, path: `artefacts/${f.slug}/plans/${s.slug}-plan.md` }))),
+  'verify-completion':   f => (f.epics||[]).flatMap(e => (e.stories||[]).map(s =>
+    ({ label: `✔ ${s.name}`, path: `artefacts/${f.slug}/verification-scripts/${s.slug}-verification.md` }))),
+  'definition-of-done':  f => (f.epics||[]).flatMap(e => (e.stories||[]).map(s =>
+    ({ label: `🏁 ${s.name}`, path: `artefacts/${f.slug}/dod/${s.slug}-dod.md` }))),
+  'trace':               f => [{ label: '🔗 Trace report', path: `artefacts/${f.slug}/trace/trace.md` }],
+};
+
+function featureCardDoneHTML(f, stageId) {
+  const doneKey   = `done::${f.slug}::${stageId}`;
+  const isOpen    = openFeatures.has(doneKey);
+  const artefacts = (STAGE_ARTEFACTS[stageId] || (() => []))(f);
+  return `
+  <div class="feature-card done-card" data-slug="${f.slug}">
+    <div class="card-header" data-action="toggle-done" data-done-key="${doneKey}">
+      <span class="card-toggle ${isOpen ? 'open' : ''}">▶</span>
+      <span class="card-title">${esc(f.name)}</span>
+      <span style="font-size:10px;color:var(--green);flex-shrink:0;opacity:.7">✓</span>
+    </div>
+    ${isOpen ? `
+    <div class="card-body open">
+      ${artefacts.length > 0
+        ? `<div style="display:flex;flex-direction:column;gap:4px">${artefacts.map(a => `<a class="drawer-link" href="${esc(a.path)}">${esc(a.label)}</a>`).join('')}</div>`
+        : '<div style="font-size:11px;color:var(--muted)">No artefacts for this stage</div>'}
+    </div>` : ''}
   </div>`;
 }
 
@@ -807,6 +899,18 @@ function bindCardEvents() {
       openEpics.has(key) ? openEpics.delete(key) : openEpics.add(key);
       render(); return;
     }
+    const doneToggle = e.target.closest('[data-action="toggle-done"]');
+    if (doneToggle) {
+      const key = doneToggle.dataset.doneKey;
+      openFeatures.has(key) ? openFeatures.delete(key) : openFeatures.add(key);
+      render(); return;
+    }
+    const doneSectionToggle = e.target.closest('[data-action="toggle-done-section"]');
+    if (doneSectionToggle) {
+      const stage = doneSectionToggle.dataset.stage;
+      openDoneSections.has(stage) ? openDoneSections.delete(stage) : openDoneSections.add(stage);
+      render(); return;
+    }
     const storyRow = e.target.closest('[data-action="open-story"]');
     if (storyRow) {
       const [fSlug, eSlug, sSlug] = storyRow.dataset.storyKey.split('::');
@@ -842,10 +946,11 @@ function initFilters() {
       openFeatures.add(f.slug);
       (f.epics||[]).forEach(e => openEpics.add(`${f.slug}::${e.slug}`));
     });
+    STAGES.forEach(s => openDoneSections.add(s.id));
     render();
   });
   document.getElementById('collapse-all-btn').addEventListener('click', () => {
-    openFeatures.clear(); openEpics.clear(); openStories.clear(); render();
+    openFeatures.clear(); openEpics.clear(); openStories.clear(); openDoneSections.clear(); render();
   });
   document.getElementById('reload-btn').addEventListener('click', loadState);
   document.getElementById('file-input').addEventListener('change', e => {
@@ -855,7 +960,8 @@ function initFilters() {
   document.getElementById('drawer-overlay').addEventListener('click', closeDrawer);
   document.getElementById('md-close').addEventListener('click', closeMdViewer);
   document.getElementById('md-overlay').addEventListener('click', closeMdViewer);
-  document.getElementById('drawer').addEventListener('click', e => {
+  // Intercept .md links anywhere on the page (drawer AND done-card artefact lists)
+  document.addEventListener('click', e => {
     const link = e.target.closest('a.drawer-link');
     if (link && (link.getAttribute('href') || '').endsWith('.md')) {
       e.preventDefault();
