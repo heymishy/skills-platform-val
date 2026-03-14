@@ -65,6 +65,7 @@ All must pass. No exceptions. Run each check and record PASS or FAIL.
 | H7 | No unresolved HIGH findings from the review report | Review |
 | H8 | Test plan has no uncovered ACs (or gaps explicitly acknowledged) | Test plan |
 | H9 | Architecture Constraints field populated; no Category E HIGH findings | Story + Architecture guardrails |
+| H-E2E | If any AC in the test plan is typed `CSS-layout-dependent` AND no E2E tooling is configured AND no `RISK-ACCEPT` is recorded in /decisions for this gap — block sign-off | Test plan + Decisions |
 
 **If any hard block fails — stop immediately:**
 

@@ -112,7 +112,71 @@ flag it:
 
 ---
 
-## Step 4 â€” AC coverage confirmation
+## Step 3a — E2E / browser-layout detection
+
+Before writing any tests, scan every AC for language that signals behaviour that **cannot be reliably tested in Jest/jsdom**. jsdom does not compute CSS layout, render stacking contexts, or resolve which DOM element sits at given screen coordinates.
+
+**Trigger patterns — flag any AC that mentions:**
+- Drag-and-drop (which element is the drop target depends on CSS layout)
+- Pointer or click coordinates relative to a rendered element
+- `getBoundingClientRect`, `offsetTop`, `scrollTop`, or any layout-derived value
+- CSS-positioned elements where the test verifies on-screen position (not just DOM presence)
+- `e.target` identity in synthetic events where target depends on CSS stacking
+- Visual rendering — font size appearance, colour, border weight, z-index stacking
+
+**For each triggered AC, present:**
+
+> ⚠️ **AC[n] is browser-layout-dependent.**
+> This cannot be reliably tested in Jest/jsdom.
+>
+> Required action — choose one:
+> 1. **E2E browser test** — add a Playwright (or equivalent) test that exercises
+>    this AC in a real browser. Preferred for any behaviour where correctness
+>    depends on CSS layout or rendered position.
+> 2. **Manual verification only** — accepted if E2E tooling is not configured.
+>    The verification script scenario must be written to the higher standard below.
+> 3. **Rewrite the AC** — restructure so it can be tested at a lower level.
+>
+> Reply: 1, 2, or 3
+
+**If option 1 is chosen but no E2E tooling is configured:**
+
+> ⚠️ **E2E TOOLING GAP: No E2E framework is configured for this repo.**
+> Playwright (or equivalent) must be set up before this test can be written.
+> Add to /decisions as DEPENDENCY and block /definition-of-ready until resolved.
+
+**If no E2E tooling exists and any AC is layout-dependent, surface this once (not per-AC):**
+
+> **E2E tooling recommendation:**
+> This story has [n] AC(s) that depend on CSS layout or rendered position.
+>
+> Options:
+> 1. Add Playwright now — before implementing this story (correct approach)
+> 2. Accept manual-only for this story, add Playwright in a follow-up —
+>    record as tech-debt in /decisions; manual scenarios written to higher standard
+> 3. Accept manual-only permanently — only for low-change, low-risk internal tools.
+>    Record as explicit RISK-ACCEPT in /decisions.
+>
+> Reply: 1, 2, or 3
+
+**Higher quality bar for manual scenarios on layout-dependent ACs:**
+
+When handling is manual-only for a CSS-layout-dependent AC, the verification
+scenario in the script must:
+- Name the **exact UI element** to interact with — not "the canvas", but
+  "the grey grid area between the quadrant labels, not the label text itself"
+- State the **exact observable outcome at position level** — not "the card moves",
+  but "the card stays at the position you dropped it and does not jump to a
+  quadrant corner"
+- Include a **negative check** — describe what broken behaviour looks like
+- Be marked **🔴** in the verification script header so it is never skipped at
+  smoke test time
+
+Record each AC's handling decision in the gap table (see Output 1 below).
+
+---
+
+## Step 4 — AC coverage confirmation
 
 Display the AC list before writing tests. Confirm coverage expectations:
 
@@ -172,9 +236,13 @@ Populate it with the answers from Step 3 before writing the individual test entr
 
 ### AC coverage table
 
-| AC | Unit tests | Integration tests | NFR tests | Manual (script only) |
-|----|-----------|------------------|-----------|---------------------|
-| AC1 | [n] | [n] | â€” | â€” |
+| AC | Description | Unit | Integration | E2E | Manual | Gap type | Risk |
+|----|-------------|------|-------------|-----|--------|----------|------|
+| AC1 | [summary] | [n] | [n] | — | — | — | 🟢 |
+
+> ⚠️ **Test plan error:** A drag-drop, `getBoundingClientRect`, CSS-position, or
+> pointer-coordinate AC listed as covered by Unit or Integration is flagged as
+> incorrectly categorised. jsdom cannot verify this class of behaviour.
 
 Every AC must have at least one test. Untestable ACs must have a manual scenario
 in the verification script.
@@ -196,9 +264,15 @@ NFR tests and state this explicitly.
 
 ### Gap table
 
-| Gap | Reason | Handling |
-|-----|--------|---------|
-| [description] | [why untestable] | Manual scenario in verification script |
+| Gap | AC | Gap type | Reason untestable in Jest | Handling |
+|-----|----|----------|--------------------------|----------|
+| [description] | ACn | CSS-layout-dependent | [why] | Manual-only — RISK-ACCEPT: [justification] |
+
+**Gap types:**
+- `CSS-layout-dependent` — default: E2E required. Manual-only handling requires explicit risk-accept justification in the table.
+- `render-only` — default: manual + screenshot evidence
+- `external-service` — default: mock + manual smoke
+- `other` — describe specifically
 
 ---
 
@@ -259,12 +333,15 @@ Write it so it works equally well for all three without modification:
 
 **Technical test plan:**
 - Every AC has at least one test
-- Every test has a specific expected result â€” not "works correctly"
-- Test data strategy section is populated â€” not blank
+- Every test has a specific expected result — not "works correctly"
+- Test data strategy section is populated — not blank
 - PCI/sensitivity constraints stated if applicable
 - Test data gaps flagged with owner and action
-- NFR tests exist for every NFR (or "None â€” confirmed" stated)
+- NFR tests exist for every NFR (or "None — confirmed" stated)
 - Gap table populated or states "No gaps"
+- No drag-drop, `getBoundingClientRect`, CSS-position, or pointer-coordinate AC is listed as covered by Unit or Integration
+- All CSS-layout-dependent gaps have gap type `CSS-layout-dependent` in the gap table
+- Any `CSS-layout-dependent` gap handled as manual-only has explicit risk-accept justification in the gap table
 
 **Verification script:**
 - Every AC has a scenario
@@ -282,7 +359,7 @@ Write it so it works equally well for all three without modification:
 - Does not run tests â€” implementation does not exist yet
 - Does not source test data â€” identifies what is needed and flags gaps
 - Does not replace a full QA test strategy
-- Does not generate E2E test plans â€” separate concern
+- Does not configure E2E tooling — but detects when E2E tests are required and blocks /definition-of-ready if E2E tooling is absent and the gap cannot be accepted with a strong manual scenario
 
 ---
 
@@ -296,3 +373,5 @@ When the test plan is saved, for each story update `.github/pipeline-state.json`
 - Set `testPlan: { status: "written", totalTests: [count], passing: 0 }`
 - Set `acTotal: [count of ACs in the story]`, `acVerified: 0`
 - Set `health: "green"`
+- Set `hasLayoutDependentGaps: true` if any AC was classified `CSS-layout-dependent`; `false` otherwise
+- Set `e2eToolingRequired: true` if any layout-dependent AC was assigned option 1 (E2E test); `false` otherwise

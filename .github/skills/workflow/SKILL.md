@@ -331,6 +331,9 @@ For each feature in `pipeline-state.json`:
    - If story files exist in `stories/` → ensure all are present in `epics[].stories[]`
    - If `review/` artefacts exist → check `reviewStatus` and `highFindings` — update if artefact shows different state
    - If `test-plans/` artefact exists → set `testPlan.status: "written"` if not already
+   - If any story in this feature is at `test-plan` stage or beyond AND `coverageMapPath`
+     is not set on the feature → add to next action: "🗺️ `/coverage-map` not yet run —
+     run it for coverage visibility across all stories in this feature"
    - If `dor/` artefact exists → set `dorStatus: "signed-off"` if it contains "Proceed: Yes"
    - If PR is merged (check `dod/` artefact exists) → set `prStatus: "merged"`, `dodStatus: "complete"`
 

@@ -96,6 +96,7 @@ Skills reference these templates — do not embed format definitions in skill fi
 | Reference index | `.github/templates/reference-index.md` |
 | Migration story | `.github/templates/migration-story.md` |
 | Consumer registry | `.github/templates/consumer-registry.md` |
+| Coverage map | `.github/templates/coverage-map.md` |
 
 When a skill produces a structured artefact, it uses the relevant template.
 When reviewing artefacts, check them against the template — missing fields are findings.
@@ -134,6 +135,9 @@ All pipeline artefacts are saved to `.github/artefacts/[feature-slug]/`:
     [story-slug]-dod.md
   trace/
     [date]-trace.md
+  coverage/
+    coverage-map.md
+    coverage-map.html
 ```
 
 ---

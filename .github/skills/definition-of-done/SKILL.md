@@ -95,6 +95,12 @@ If a violation is found:
 
 Confirm the tests from the test plan were implemented and are passing in CI.
 
+**Coverage gap audit:** If the test plan contains any `CSS-layout-dependent` gaps:
+- Were they RISK-ACCEPTed in /decisions before coding started? (check `decisions.md`)
+- Was the manual verification scenario actually executed during pre-code sign-off or post-merge smoke test?
+- Record both answers in the DoD artefact — this is the audit trail for layout bugs that ship post-merge.
+- If a RISK-ACCEPT was not recorded and a layout bug shipped → flag as deviation (not a failure, but must be recorded).
+
 If any tests were not implemented:
 
 > ⚠️ **Test gap: [test name] was not implemented.**
@@ -190,6 +196,7 @@ Update `.github/pipeline-state.json` in the **project repository** when the DoD 
 - If all ACs are covered: set `releaseReady: true`
 - If deviations or gaps exist: set `releaseReady: false`, `health: "amber"`, note deviation in `blocker`
 - Update the epic `status`: if all stories in the epic are `dodStatus: "complete"`, set epic `status: "complete"`
+- **Layout gap audit (from Step 4):** Set `layoutGapsAtMerge: true` if the test plan had any `CSS-layout-dependent` gaps at merge time; set `layoutGapsRiskAccepted: true` if a RISK-ACCEPT was recorded in /decisions before coding started
 - **Metrics (from Step 6):** For each metric that was assessed, update the feature's `metrics` array:
   - `metrics[x].signal` ← determined signal value (`"on-track"` / `"at-risk"` / `"off-track"` / `"not-yet-measured"`)
   - `metrics[x].evidence` ← evidence string or `null`

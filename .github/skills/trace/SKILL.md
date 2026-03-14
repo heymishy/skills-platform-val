@@ -100,6 +100,22 @@ drifted from the plan.
 List any ACs not covered by the test plan. List test plan gaps acknowledged
 but not mitigated.
 
+**CSS-layout-dependent gap check:**
+For each story with a test plan, check the gap table for entries with gap type
+`CSS-layout-dependent` handled as manual-only:
+- If no matching RISK-ACCEPT is found in the feature's `decisions.md` → flag as
+  MEDIUM finding: "AC[n] in [story] is CSS-layout-dependent, handled manual-only,
+  no RISK-ACCEPT recorded. See /decisions."
+- Severity: MEDIUM — this class of gap is how layout bugs ship post-merge.
+
+**Coverage map check:**
+- If `coverageMapPath` is not set on the feature AND the feature has at least one
+  story at `test-plan` stage or beyond → surface as a suggestion:
+  "🗺️ Coverage map not generated — run `/coverage-map` for gap visibility"
+- If `coverageRisk: "red"` is set on the feature → flag as MEDIUM finding:
+  "Feature has red coverage risk — CSS-layout-dependent gaps present. Review
+  the coverage map before proceeding."
+
 **Open spikes:**
 List any spikes with no outcome artefact — these represent known unknowns
 still unresolved.
