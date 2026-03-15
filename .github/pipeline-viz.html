@@ -490,6 +490,7 @@
 const STATE_FILE = 'pipeline-state.json';
 
 const STAGES = [
+  { id: 'ideation',            label: 'Ideation' },
   { id: 'discovery',           label: 'Discovery' },
   { id: 'benefit-metric',      label: 'Benefit Metric' },
   { id: 'definition',          label: 'Definition' },
@@ -504,6 +505,7 @@ const STAGES = [
   { id: 'branch-complete',     label: 'Branch Done' },
   { id: 'definition-of-done',  label: 'Def of Done' },
   { id: 'trace',               label: 'Trace' },
+  { id: 'release-pending',     label: 'Release Pending' },
   { id: 'released',            label: 'Released' },
   { id: 'spike',               label: 'Spike' },
   { id: 'stalled',             label: 'Stalled' },
@@ -831,9 +833,9 @@ function renderBoard(features) {
   const stageIdx = {};
   STAGES.forEach((s, i) => { stageIdx[s.id] = i; });
 
-  const coreStages = ['discovery','benefit-metric','definition','review','test-plan',
+  const coreStages = ['ideation','discovery','benefit-metric','definition','review','test-plan',
     'definition-of-ready','subagent-execution','verify-completion','branch-complete',
-    'definition-of-done','released'];
+    'definition-of-done','release-pending','released'];
   const stagesToShow = STAGES.filter(s =>
     coreStages.includes(s.id) || features.some(f => f.stage === s.id));
 
