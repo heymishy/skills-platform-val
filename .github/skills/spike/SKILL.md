@@ -2,7 +2,7 @@
 name: spike
 description: >
   Handles unknowns that are blocking pipeline progress. Accepts a specific question,
-  defines a timebox and done condition before any investigation begins, then produces
+  defines a scope limit and done condition before any investigation begins, then produces
   a structured outcome artefact — PROCEED, REDESIGN, or DEFER — that feeds back into
   /decisions and unblocks the pipeline. Use when /review, /definition, or
   /definition-of-ready hits a genuine unknown, or when someone says "spike this",
@@ -57,21 +57,25 @@ Ask this first. Do not proceed until answered.
 
 **Type 2 — Regulatory interpretation** requires named human sign-off before the
 outcome can be set. The agent's interpretation alone is never sufficient.
-Book the compliance or legal conversation before the timebox starts.
+Produce DEFER immediately and note who needs to be consulted and what the
+specific question is for that conversation.
 
-**Type 5 — Knowledge gap** means the answer lives in a person's head.
-Book the meeting before the timebox starts — a timebox with no meeting scheduled
-is a DEFER waiting to happen.
+**Type 5 — Knowledge gap** means the answer lives in a person's head, not in
+any source the agent can reach. Produce DEFER immediately and specify who to
+consult and what to ask them.
 
 ---
 
-## Step 4 — Set the timebox
+## Step 4 — Set the investigation scope
 
-> **How long should this spike run?**
+> **How broad does this investigation need to be?**
 >
-> 1. 1 day
-> 2. 2 days
-> 3. 3 days (maximum — if longer is needed, the question is too broad)
+> 1. Narrow — a single targeted source, test, or check (up to 3 steps)
+> 2. Standard — multiple sources, or a small prototype required (up to 6 steps)
+> 3. Thorough — several approaches compared, or multiple integrations tested (up to 10 steps)
+>
+> If the done condition is met before the limit — stop. Do not expand to fill the scope.
+> If the limit is reached without the done condition met — stop and produce DEFER.
 >
 > Reply: 1, 2, or 3
 
@@ -116,7 +120,7 @@ Confirm everything before saving:
 > Question: [stated question]
 > Type: [type name]
 > Blocking: [blocked stage]
-> Timebox: [n days] — expires [date]
+> Scope: [narrow / standard / thorough — max N steps]
 > Done condition: [done condition]
 > Out of scope: [out of scope]
 >
@@ -145,9 +149,9 @@ After each step:
 > Continue to step [n+1], or is the done condition already met?
 > Reply: continue — or done if you have enough"
 
-If the done condition is met before the timebox expires — stop. Do not expand scope.
+If the done condition is met before the scope limit is reached — stop. Do not expand scope.
 
-If the timebox expires without the done condition being met — stop and produce
+If the scope limit is reached without the done condition being met — stop and produce
 the outcome artefact with DEFER and an honest accounting of what remains unknown.
 
 ---
@@ -202,9 +206,11 @@ Always present the outcome as a choice, not a statement:
 
 ## Quality checks before closing
 
+- Scope limit was defined before investigation — not after
 - Done condition was defined before investigation — not after
 - Outcome is PROCEED, REDESIGN, or DEFER — not "it depends"
 - What remains unknown is stated honestly — even for PROCEED
+- Type 2 and Type 5 spikes produce DEFER with named consultation required — not an agent-generated answer
 - /decisions has been invoked or explicitly skipped
 - Both brief and outcome artefacts are saved
 
@@ -216,7 +222,7 @@ Always present the outcome as a choice, not a statement:
 - Does not make regulatory interpretations without named human sign-off
 - Does not expand scope once the brief is agreed
 - Does not produce PROCEED if done condition was not met — uses DEFER instead
-- Does not continue past the timebox
+- Does not continue past the scope limit
 
 ---
 
