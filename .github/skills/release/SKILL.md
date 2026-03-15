@@ -21,37 +21,40 @@ triggers:
 
 # Release Skill
 
-## Step 0 — Read tool integrations (optional)
+## Step 0 — Read tool integrations from context
 
-Before producing outputs, check `.github/copilot-instructions.md` for the
-**Tool integrations** section. If configured, release artefacts are extended
-with tool-specific references.
+Before producing outputs, read `.github/context.yml` (the active pipeline context).
+If the file does not exist, fall back to the **Tool integrations** table in the
+agent instruction file (e.g. `copilot-instructions.md`).
 
-| Tool | When configured, outputs will include... |
-|------|------------------------------------------|
-| ServiceNow | ServiceNow field names in the change request (CHG number, assignment group, change category), ITSM base URL |
-| Jenkins / CloudBees | Pipeline build links in the deployment checklist and test evidence section |
-| Dynatrace | Dashboard and synthetic monitor links in the deployment checklist; Dynatrace problem feed in rollback triggers |
-| Splunk | Saved search links for log scanning in the post-deployment verification steps |
-| PagerDuty | Service URL for on-call contact confirmation in the deployment checklist |
-| Jira | Story ticket links in release notes and the change request |
-| Nexus / Artifactory | Artefact version reference in the deployment checklist |
+The fields that control release output are:
+
+| `context.yml` field | When set, outputs will include... |
+|---------------------|-----------------------------------|
+| `change_management.tool` (e.g. `servicenow`, `jira-sm`) | ITSM field names in the change request (ticket number, assignment group, change category, base URL) |
+| `tools.ci_platform` (e.g. `jenkins`, `github-actions`, `gitlab-ci`) | Pipeline build links in the deployment checklist and test evidence section |
+| `tools.monitoring` (e.g. `dynatrace`, `datadog`, `newrelic`) | Dashboard and synthetic monitor links in the deployment checklist; monitoring problem feed in rollback triggers |
+| `tools.log_aggregation` (e.g. `splunk`, `elk`, `cloudwatch`) | Saved search / log query links in the post-deployment verification steps |
+| `tools.alerting` (e.g. `pagerduty`, `opsgenie`) | On-call service URL for contact confirmation in the deployment checklist |
+| `tools.project_management` (e.g. `jira`, `linear`, `github-issues`) | Story ticket links in release notes and the change request |
+| `tools.artifact_registry` (e.g. `nexus`, `artifactory`, `github-packages`) | Artefact version reference in the deployment checklist |
 
 State what was detected before proceeding:
 
-> **Tool integrations detected:**
-> - ServiceNow: [configured — base URL / not configured]
-> - CI/CD (Jenkins / CloudBees): [configured / not configured]
-> - Dynatrace: [configured / not configured]
-> - Splunk: [configured / not configured]
-> - PagerDuty: [configured / not configured]
-> - Jira: [configured / not configured]
+> **Tool integrations detected from context.yml:**
+> - Change management: [`change_management.tool` value / not configured]
+> - CI/CD: [`tools.ci_platform` value / not configured]
+> - Monitoring: [`tools.monitoring` value / not configured]
+> - Log aggregation: [`tools.log_aggregation` value / not configured]
+> - Alerting: [`tools.alerting` value / not configured]
+> - Project management: [`tools.project_management` value / not configured]
+> - Artefact registry: [`tools.artifact_registry` value / not configured]
 >
 > Are these correct, or should I use different tools for this release?
 > Reply: correct — or specify overrides
 
-If no tool config is present, use generic `[monitoring tool]`, `[log tool]`,
-and `[change management tool]` placeholders throughout.
+If no `context.yml` is present and no tool config is found, use generic
+`[monitoring tool]`, `[log tool]`, and `[change management tool]` placeholders throughout.
 
 ---
 
@@ -72,8 +75,19 @@ State what was found before asking:
 
 ## Step 1b — Compliance bundle (regulated and programme releases)
 
+If `context.yml` has `regulated: true` or `compliance.frameworks` is non-empty,
+surface this automatically:
+
+> **This repo is marked as regulated** (frameworks: [`compliance.frameworks` values]).
+> Is this release in scope for a compliance evidence bundle?
+>
+> 1. Yes — produce a compliance evidence bundle alongside standard release artefacts
+> 2. No — standard release outputs only
+
+If `context.yml` is absent or `regulated: false`, ask:
+
 > **Is this release part of a regulated, audited, or programme-gated context?**
-> (e.g. cards issuing, PCI-DSS scope, SOX, internal audit, phase gate completion,
+> (e.g. in PCI-DSS scope, SOX audit trail required, internal phase gate completion,
 > post-incident remediation, regulatory deadline)
 >
 > 1. Yes — produce a compliance evidence bundle alongside standard release artefacts
@@ -165,9 +179,12 @@ If 3:
 Conforms to `.github/templates/release-notes-technical.md`.
 Save to `.github/artefacts/[feature]/release/[version]-release-notes-technical.md`.
 
-If Dynatrace is configured: add a rollback trigger condition referencing the Dynatrace problem feed.
-If Jira is configured: link each story title to the Jira ticket.
-If Jenkins / CloudBees is configured: populate the pipeline build field in the header.
+If `context.tools.monitoring` is configured: add a rollback trigger condition
+referencing the monitoring platform's alerting or problem feed.
+If `context.tools.project_management` is configured (e.g. Jira, Linear):
+link each story title to the corresponding ticket.
+If `context.tools.ci_platform` is configured: populate the pipeline build field
+in the header with the CI build URL.
 
 ---
 
@@ -194,9 +211,16 @@ Produce a complete change request ready to paste into the change management tool
 Do not leave fields blank — if information is missing, state what is needed and
 who must provide it.
 
-If ServiceNow is configured: use ServiceNow field names, include the assignment group,
-change category, and base URL pattern for the CHG link.
-If Jenkins / CloudBees is configured: link the CI build URL in the test evidence section.
+If `context.change_management.tool` is set to `servicenow`: use ServiceNow field
+names, include the assignment group (`context.change_management.assignment_group`),
+change category (`context.change_management.change_category`), and base URL pattern
+for the CHG link (`context.change_management.base_url`).
+If `context.change_management.tool` is set to `jira-sm` or similar: adapt field
+names to match the configured ITSM tool's terminology.
+If `context.change_management.process` is `none` or `context.change_management.tool`
+is null: produce a lightweight change record suitable for informal review, and omit
+ITSM-specific fields.
+If `context.tools.ci_platform` is configured: link the CI build URL in the test evidence section.
 
 ---
 
@@ -205,11 +229,17 @@ If Jenkins / CloudBees is configured: link the CI build URL in the test evidence
 Conforms to `.github/templates/deployment-checklist.md`.
 Save to `.github/artefacts/[feature]/release/[version]-deployment-checklist.md`.
 
-If Dynatrace is configured: add dashboard URL to monitoring dashboards, Dynatrace
-synthetic monitor to post-deployment verification, and problem feed to rollback triggers.
-If Splunk is configured: add saved search links for post-deployment log scanning.
-If PagerDuty is configured: add PagerDuty service URL to on-call confirmation step.
-If Jenkins / CloudBees is configured: add pipeline build URL to deployment steps.
+If `context.tools.monitoring` is configured: add the monitoring dashboard URL,
+a synthetic monitor check in post-deployment verification, and the monitoring
+platform's alerting feed as a primary rollback trigger.
+If `context.tools.log_aggregation` is configured: add saved search / log query
+links for post-deployment log scanning.
+If `context.tools.alerting` is configured: add the on-call service URL to the
+on-call confirmation step.
+If `context.tools.ci_platform` is configured: add the pipeline build URL to
+deployment steps.
+If `context.tools.artifact_registry` is configured: add the artefact version
+reference to the deployment steps.
 
 ---
 
