@@ -93,7 +93,7 @@ flowchart TD
 
     %% ─── SUPPORTING SKILLS ─────────────────────────────────────
     subgraph SUPPORT["🔧 Supporting Skills"]
-        SPIKE["/spike\nTimeboxed investigation\nPROCEED / REDESIGN / DEFER"]
+        SPIKE["/spike\nScoped investigation\nPROCEED / REDESIGN / DEFER"]
         DEC["/decisions\nRunning log + ADRs\nFeature + repo level"]
         RE["/reverse-engineer\nExtract business rules\nfrom legacy code"]
         CM["/coverage-map\nVisual AC coverage map\ngap type · risk level"]
@@ -321,7 +321,7 @@ When in doubt about which track, run `/workflow` — it will route you.
 | `/record-signal` | Records a benefit metric signal without a full DoD run | When measurement data is available: "we got data", "record a signal" |
 | `/decisions` | Records ADRs and in-flight decisions | At any pipeline decision point |
 | `/ideate` | Structured product discovery — five lenses: opportunity mapping, assumption inventory, market scan, product strategy framing (Torres + Cagan), and jobs-to-be-done (Christensen / Moesta). Suggests lenses based on current pipeline stage and artefacts | Run at any point: blank-slate exploration, enrich an active discovery, or stress-test assumptions before definition |
-| `/spike` | Timeboxed investigation for genuine unknowns | When a step is blocked by something unknown |
+| `/spike` | Scoped investigation for genuine unknowns | When a step is blocked by something unknown |
 | `/reverse-engineer` | Extracts business rules from legacy code | When modernising or replacing a legacy system |
 | `/programme` | Programme-level navigator for multi-team work | Large initiatives, migrations, library rewrites |
 | `/metric-review` | Re-baselines benefit metrics at phase gates | Quarterly, at phase gates, or when targets are questioned |
