@@ -56,6 +56,14 @@ State what was detected before proceeding:
 If no `context.yml` is present and no tool config is found, use generic
 `[monitoring tool]`, `[log tool]`, and `[change management tool]` placeholders throughout.
 
+Also apply policy overlays if present:
+
+- `mapping.governance.gates`: use org governance labels alongside canonical
+  release/change wording
+- `mapping.artefact_aliases`: include org artefact names in output headings
+- `optimization.token_policy`: keep release summaries concise; place detailed
+  operational evidence in appendices
+
 ---
 
 ## Step 1 — Identify what is in scope for this release

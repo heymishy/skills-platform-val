@@ -141,6 +141,12 @@ Ask this before presenting any pipeline guidance:
 >
 > Reply: 1, 2, 3, or 4
 
+Notes:
+- `/loop-design` and `/scale-pipeline` are strategic design skills
+- `/token-optimization` and `/org-mapping` also act as policy overlays consumed
+  by core skills (`/implementation-plan`, `/subagent-execution`, `/review`,
+  `/definition-of-ready`, `/verify-completion`, `/release`)
+
 ---
 
 ## Standard pipeline reference

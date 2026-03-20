@@ -41,6 +41,12 @@ Before claiming any status:
 
 Skip any step = making an unsupported claim.
 
+Before Step 1, read `.github/context.yml` and apply policy overlays:
+
+- `optimization.token_policy`: keep verification summaries concise and evidence-first
+- `mapping.artefact_aliases`: include org artefact names in headings where useful,
+  while still referencing canonical verification script paths
+
 ---
 
 ## Step 1 — Run the full test suite

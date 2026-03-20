@@ -75,8 +75,8 @@ and /reverse-engineer
 
 **Pipeline evolution support:**
 `/loop-design` — define outer/inner loop model and swappable inner-loop contract
-`/token-optimization` — tune model routing and token budgets by stage
-`/org-mapping` — map pipeline language/artefacts to organisation governance
+`/token-optimization` — tune model routing and token budgets by stage (policy consumed by core skills)
+`/org-mapping` — map pipeline language/artefacts to organisation governance (policy consumed by core skills)
 `/scale-pipeline` — design multi-team enterprise operating model
 
 **Short-track** (bugs, small fixes, bounded refactors): 

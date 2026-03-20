@@ -52,6 +52,13 @@ State what was found first:
 > Review all stories, or a specific one?
 > Reply: all — or name the story
 
+Before Step 2, read `.github/context.yml` and apply policy overlays:
+
+- `mapping.stage_aliases` / `mapping.artefact_aliases`: include org terms in
+  headings while preserving canonical story/template references
+- `optimization.token_policy`: keep the main report concise and move deep evidence
+  details to appendices where possible
+
 ---
 
 ## Step 2 — Confirm review categories

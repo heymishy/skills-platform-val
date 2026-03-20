@@ -50,6 +50,21 @@ State what was loaded:
 
 ---
 
+## Step 1.5 — Apply context policy overlays
+
+Before planning tasks, read `.github/context.yml` and apply:
+
+- `optimization.token_policy.*`: keep the plan concise by default; include full
+  code blocks only where needed for execution clarity
+- `optimization.routing.*`: annotate each task with recommended model class
+  (`fast/cheap`, `balanced`, or `deep-reasoning`) for /subagent-execution
+- `mapping.stage_aliases` and `mapping.artefact_aliases`: include org-specific
+  labels in section headings (keep canonical pipeline names in parentheses)
+
+If no context values exist, use canonical names and default verbosity.
+
+---
+
 ## Step 2 — Map file structure
 
 Before writing tasks, identify every file to be created or modified.

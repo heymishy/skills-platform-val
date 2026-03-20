@@ -193,6 +193,17 @@ Use `/loop-design` to formalise this model and define a **swappable inner-loop c
 That lets teams keep the default inner loop in this repo or map an alternative
 skill pack/toolchain while preserving entry/exit contracts and evidence gates.
 
+### Cross-cutting policy model
+
+`/token-optimization` and `/org-mapping` are not only standalone planning skills.
+Their outputs are intended to be consumed directly by core pipeline steps via
+`.github/context.yml` overlays:
+
+- token/model policy -> `/implementation-plan`, `/subagent-execution`, `/review`, `/verify-completion`, `/release`
+- org language/governance mapping -> `/definition-of-ready`, `/release`, `/workflow`, and report output headings
+
+This keeps day-to-day execution aligned without needing to run extra skills every time.
+
 **Inner coding loop** (expands Step 7):
 ```
 /branch-setup → /implementation-plan → /subagent-execution (or /tdd per task) → /verify-completion → /branch-complete
@@ -339,8 +350,8 @@ When in doubt about which track, run `/workflow` — it will route you.
 | `/spike` | Scoped investigation for genuine unknowns | When a step is blocked by something unknown |
 | `/ea-registry` | Maintains and queries an organisation-level application/interface registry; supports QUERY, CONTRIBUTE, AUDIT, and FEED modes | When you need app/interface inventory, dependency context, blast radius, or registry updates |
 | `/loop-design` | Defines outer/inner loop operating model and swappable inner-loop contract | When you want to model delivery as two loops or substitute a custom inner loop |
-| `/token-optimization` | Creates model-routing and token budget policies by stage | When cost/latency/token usage needs to be controlled without losing quality |
-| `/org-mapping` | Maps skills, stages, and artefacts to organisation language and governance | When adopting pipeline terminology into enterprise process/governance language |
+| `/token-optimization` | Defines model-routing and token budget policy that is consumed by core execution/review/release skills | When cost/latency/token usage needs to be controlled without losing quality |
+| `/org-mapping` | Defines terminology/governance mappings that are consumed by DoR/release/workflow and reporting outputs | When adopting pipeline terminology into enterprise process/governance language |
 | `/scale-pipeline` | Designs operating model for scaling from small pilots to enterprise multi-team use | When planning rollout from 1-2 teams to 20-30 teams |
 | `/reverse-engineer` | Extracts business rules from legacy code | When modernising or replacing a legacy system |
 | `/programme` | Programme-level navigator for multi-team work | Large initiatives, migrations, library rewrites |

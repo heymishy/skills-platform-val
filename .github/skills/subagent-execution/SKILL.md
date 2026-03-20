@@ -42,6 +42,19 @@ This keeps reviewers objective.
 
 ---
 
+## Policy overlays (embedded)
+
+Read `.github/context.yml` at start of execution.
+
+- If `optimization.routing` exists: choose implementer/reviewer model class from
+  policy first, then fall back to the default model-selection table below
+- If `optimization.token_policy` exists: keep task prompts minimal and only pass
+  task-local context, not full session history
+- If `mapping.stage_aliases` exists: include org-stage labels in progress updates
+  while keeping canonical stage names for state updates
+
+---
+
 ## Step 1 â€” Read the plan once
 
 Read `.github/artefacts/[feature]/plans/[story-slug]-plan.md` fully.
@@ -155,7 +168,8 @@ If issues found: address before proceeding.
 
 ## Model selection
 
-Use the least capable model that can handle each role to conserve cost:
+Use context policy first (`optimization.routing`). If not configured, use the
+least capable model that can handle each role to conserve cost:
 
 | Role | Recommended model |
 |------|------------------|

@@ -48,6 +48,12 @@ State what was found:
 > Running definition-of-ready check on this story.
 > Reply: go — or name a different story
 
+Read `.github/context.yml` before evaluating oversight:
+
+- `mapping.governance.gates`: if a mapped gate corresponds to DoR sign-off,
+  use its org label in output (keep `definition-of-ready` wording as canonical)
+- `mapping.stage_aliases`: include org-stage alias in completion guidance
+
 ---
 
 ## Hard blocks — H1 to H8
@@ -111,7 +117,7 @@ Check the parent epic for the oversight level:
 
 **Low** — no sign-off required. Proceed directly to coding agent assignment.
 
-**Medium** — tech lead / engineering lead awareness required (see `context.yml: roles.tech_lead`).
+**Medium** — tech lead awareness required (see `context.yml: roles.tech_lead`).
 Share the DoR artefact before assigning. No formal sign-off needed.
 Surface as:
 > ⚠️ **Medium oversight** — share the DoR artefact with the tech lead
