@@ -1,0 +1,349 @@
+{
+  "version": "1",
+  "updated": "2026-03-21T10:30:00Z",
+  "programmes": [
+    {
+      "slug": "enterprise-rollout-2026",
+      "name": "Enterprise Pipeline Rollout",
+      "status": "active",
+      "currentPhase": "Phase 1 - Pilot",
+      "phaseGates": [
+        { "name": "Pilot Gate", "targetDate": "2026-04-10", "status": "pending" },
+        { "name": "Expansion Gate", "targetDate": "2026-06-30", "status": "pending" }
+      ],
+      "workstreams": ["ws-portal-modernisation", "ws-payments-hardening"],
+      "dependencies": [
+        { "upstream": "ws-portal-modernisation", "downstream": "ws-payments-hardening", "gate": "definition", "status": "pending" }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "slug": "skill-library-loop-model",
+      "name": "Skill Library Two-Loop Operating Model",
+      "track": "library",
+      "team": "Platform Enablement",
+      "stage": "loop-design",
+      "health": "green",
+      "updatedAt": "2026-03-21T10:20:00Z",
+      "problem": "Need an explicit outer/inner loop model before scaling the skill library.",
+      "metrics": [
+        {
+          "id": "m-loop-clarity",
+          "name": "Teams using loop contract",
+          "target": "4 teams",
+          "baseline": "0 teams",
+          "signal": "at-risk",
+          "evidence": "Draft model exists, awaiting pilot adoption",
+          "lastMeasured": "2026-03-21",
+          "contributingStories": []
+        }
+      ],
+      "epics": []
+    },
+    {
+      "slug": "skill-library-token-policy",
+      "name": "Library-wide Token and Model Routing Policy",
+      "track": "library",
+      "team": "Platform Enablement",
+      "stage": "token-optimization",
+      "health": "amber",
+      "updatedAt": "2026-03-21T10:15:00Z",
+      "blocker": "Missing real usage telemetry from two pilot teams",
+      "problem": "Token usage is increasing as adoption scales.",
+      "metrics": [
+        {
+          "id": "m-token-cost",
+          "name": "Token cost per feature",
+          "target": "< 300k tokens/feature",
+          "baseline": "~520k tokens/feature",
+          "signal": "at-risk",
+          "evidence": "Optimization policy drafted, not yet enforced across all core skills",
+          "lastMeasured": "2026-03-20",
+          "contributingStories": []
+        }
+      ],
+      "epics": []
+    },
+    {
+      "slug": "org-language-governance-map",
+      "name": "Org Language + Governance Mapping",
+      "track": "library",
+      "team": "Architecture",
+      "stage": "org-mapping",
+      "health": "green",
+      "updatedAt": "2026-03-21T09:55:00Z",
+      "problem": "Teams need local terminology while keeping pipeline integrity.",
+      "metrics": [
+        {
+          "id": "m-mapping-adoption",
+          "name": "Mapped stage aliases in use",
+          "target": "100% pilot teams",
+          "baseline": "0%",
+          "signal": "on-track",
+          "evidence": "Pilot team A uses mapping.stage_aliases in context",
+          "lastMeasured": "2026-03-21",
+          "contributingStories": []
+        }
+      ],
+      "epics": []
+    },
+    {
+      "slug": "enterprise-scale-operating-model",
+      "name": "Scale Pipeline to 20-30 Teams",
+      "track": "library",
+      "team": "Platform Enablement",
+      "stage": "scale-pipeline",
+      "health": "amber",
+      "updatedAt": "2026-03-21T09:40:00Z",
+      "blocker": "Cross-repo aggregation strategy undecided",
+      "problem": "Need a scale-safe control plane for multi-team human+agentic use.",
+      "metrics": [
+        {
+          "id": "m-scale-readiness",
+          "name": "Scale readiness score",
+          "target": "8/10",
+          "baseline": "3/10",
+          "signal": "at-risk",
+          "evidence": "Rollout phases drafted; state architecture decision pending",
+          "lastMeasured": "2026-03-21",
+          "contributingStories": []
+        }
+      ],
+      "epics": []
+    },
+    {
+      "slug": "ws-portal-modernisation",
+      "name": "Portal Modernisation Workstream",
+      "track": "programme-workstream",
+      "programmeSlug": "enterprise-rollout-2026",
+      "team": "Team Alpha",
+      "stage": "review",
+      "health": "amber",
+      "updatedAt": "2026-03-21T09:10:00Z",
+      "epics": [
+        {
+          "slug": "portal-auth-refresh",
+          "name": "Auth Refresh",
+          "status": "in-progress",
+          "stories": [
+            {
+              "slug": "portal-mfa-journey",
+              "name": "MFA Journey",
+              "stage": "review",
+              "health": "amber",
+              "reviewStatus": "has-findings",
+              "highFindings": 1,
+              "testPlan": { "status": "written", "totalTests": 9, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 5,
+              "releaseReady": false,
+              "tasks": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "ws-payments-hardening",
+      "name": "Payments Hardening Workstream",
+      "track": "programme-workstream",
+      "programmeSlug": "enterprise-rollout-2026",
+      "team": "Team Beta",
+      "stage": "subagent-execution",
+      "health": "green",
+      "updatedAt": "2026-03-21T10:05:00Z",
+      "epics": [
+        {
+          "slug": "idempotency-controls",
+          "name": "Idempotency Controls",
+          "status": "in-progress",
+          "stories": [
+            {
+              "slug": "payment-retry-idempotency",
+              "name": "Payment Retry Idempotency",
+              "stage": "subagent-execution",
+              "health": "green",
+              "reviewStatus": "passed",
+              "highFindings": 0,
+              "testPlan": { "status": "written", "totalTests": 14, "passing": 11 },
+              "dorStatus": "signed-off",
+              "prStatus": "draft",
+              "prUrl": "https://github.com/heymishy/skills-repo/pull/999",
+              "dodStatus": "not-started",
+              "acVerified": 3,
+              "acTotal": 5,
+              "releaseReady": false,
+              "tasks": [
+                { "id": "task-1", "name": "Add failing retry collision tests", "tddState": "committed", "file": "artefacts/ws-payments-hardening/plans/payment-retry-idempotency-plan.md" },
+                { "id": "task-2", "name": "Implement idempotency key repository", "tddState": "green", "file": "artefacts/ws-payments-hardening/plans/payment-retry-idempotency-plan.md" },
+                { "id": "task-3", "name": "Refactor duplicate detection service", "tddState": "refactor", "file": "artefacts/ws-payments-hardening/plans/payment-retry-idempotency-plan.md" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "self-serve-access-requests",
+      "name": "Self-Serve Access Requests",
+      "track": "standard",
+      "team": "Team Gamma",
+      "stage": "verify-completion",
+      "health": "green",
+      "updatedAt": "2026-03-21T09:58:00Z",
+      "epics": [
+        {
+          "slug": "access-request-flow",
+          "name": "Access Request Flow",
+          "status": "in-progress",
+          "stories": [
+            {
+              "slug": "request-approval-workflow",
+              "name": "Request Approval Workflow",
+              "stage": "verify-completion",
+              "health": "green",
+              "reviewStatus": "passed",
+              "highFindings": 0,
+              "testPlan": { "status": "all-passing", "totalTests": 12, "passing": 12 },
+              "dorStatus": "signed-off",
+              "prStatus": "draft",
+              "dodStatus": "not-started",
+              "acVerified": 5,
+              "acTotal": 5,
+              "releaseReady": true,
+              "tasks": [
+                { "id": "task-1", "name": "Workflow API contract tests", "tddState": "committed", "file": "artefacts/self-serve-access-requests/plans/request-approval-workflow-plan.md" },
+                { "id": "task-2", "name": "Approval state machine", "tddState": "committed", "file": "artefacts/self-serve-access-requests/plans/request-approval-workflow-plan.md" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "incident-hotfix-rate-limit",
+      "name": "Rate Limit Hotfix",
+      "track": "short",
+      "team": "Ops SWAT",
+      "stage": "branch-complete",
+      "health": "green",
+      "updatedAt": "2026-03-21T08:45:00Z",
+      "epics": [
+        {
+          "slug": "hotfix-rate-limit",
+          "name": "Hotfix",
+          "status": "complete",
+          "stories": [
+            {
+              "slug": "api-rate-limit-headers",
+              "name": "API Rate Limit Headers",
+              "stage": "branch-complete",
+              "health": "green",
+              "reviewStatus": "passed",
+              "highFindings": 0,
+              "testPlan": { "status": "all-passing", "totalTests": 6, "passing": 6 },
+              "dorStatus": "signed-off",
+              "prStatus": "open",
+              "prUrl": "https://github.com/heymishy/skills-repo/pull/998",
+              "dodStatus": "not-started",
+              "acVerified": 3,
+              "acTotal": 3,
+              "releaseReady": true,
+              "tasks": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "legacy-auth-proxy-replacement",
+      "name": "Legacy Auth Proxy Replacement",
+      "track": "standard",
+      "team": "Team Delta",
+      "stage": "spike",
+      "health": "red",
+      "updatedAt": "2026-03-21T08:15:00Z",
+      "blocker": "Open spike: unknown token handoff contract to downstream systems",
+      "epics": []
+    },
+    {
+      "slug": "customer-preferences-ui",
+      "name": "Customer Preferences UI",
+      "track": "standard",
+      "team": "Team Epsilon",
+      "stage": "released",
+      "health": "green",
+      "updatedAt": "2026-03-20T17:45:00Z",
+      "problem": "Users need a single place to manage notification settings.",
+      "metrics": [
+        {
+          "id": "m-pref-completion",
+          "name": "Preference update completion rate",
+          "target": "85%",
+          "baseline": "54%",
+          "signal": "on-track",
+          "evidence": "First week post-release: 88% completion",
+          "lastMeasured": "2026-03-21",
+          "contributingStories": ["preferences-save-flow", "preferences-validation"]
+        },
+        {
+          "id": "m-support-tickets",
+          "name": "Preference-related support tickets",
+          "target": "< 20/week",
+          "baseline": "47/week",
+          "signal": "at-risk",
+          "evidence": "Dropped to 24/week; still above target",
+          "lastMeasured": "2026-03-21",
+          "contributingStories": ["preferences-save-flow"]
+        }
+      ],
+      "epics": [
+        {
+          "slug": "preferences-core",
+          "name": "Preferences Core",
+          "status": "complete",
+          "stories": [
+            {
+              "slug": "preferences-save-flow",
+              "name": "Preferences Save Flow",
+              "stage": "definition-of-done",
+              "health": "green",
+              "reviewStatus": "passed",
+              "highFindings": 0,
+              "testPlan": { "status": "all-passing", "totalTests": 15, "passing": 15 },
+              "dorStatus": "signed-off",
+              "prStatus": "merged",
+              "prUrl": "https://github.com/heymishy/skills-repo/pull/997",
+              "dodStatus": "complete",
+              "acVerified": 6,
+              "acTotal": 6,
+              "releaseReady": true,
+              "tasks": []
+            },
+            {
+              "slug": "preferences-validation",
+              "name": "Preferences Validation",
+              "stage": "definition-of-done",
+              "health": "green",
+              "reviewStatus": "passed",
+              "highFindings": 0,
+              "testPlan": { "status": "all-passing", "totalTests": 8, "passing": 8 },
+              "dorStatus": "signed-off",
+              "prStatus": "merged",
+              "prUrl": "https://github.com/heymishy/skills-repo/pull/996",
+              "dodStatus": "complete",
+              "acVerified": 4,
+              "acTotal": 4,
+              "releaseReady": true,
+              "tasks": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

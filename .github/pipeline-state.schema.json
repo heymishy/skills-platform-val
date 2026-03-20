@@ -57,18 +57,19 @@
         "properties": {
           "slug":          { "type": "string" },
           "name":          { "type": "string" },
-          "track":         { "type": "string", "enum": ["short", "standard", "programme-workstream"] },
+          "track":         { "type": "string", "enum": ["short", "standard", "programme-workstream", "library"] },
           "programmeSlug": { "type": "string", "description": "set if track is programme-workstream" },
           "team":          { "type": "string" },
           "stage": {
             "type": "string",
             "description": "Current pipeline stage",
             "enum": [
-              "discovery", "benefit-metric", "definition", "review",
+              "loop-design", "token-optimization", "org-mapping", "scale-pipeline",
+              "ideation", "discovery", "benefit-metric", "definition", "review",
               "test-plan", "definition-of-ready",
               "branch-setup", "implementation-plan", "subagent-execution",
               "implementation-review", "verify-completion", "branch-complete",
-              "definition-of-done", "trace", "released",
+              "definition-of-done", "trace", "release-pending", "released",
               "spike", "stalled"
             ]
           },
