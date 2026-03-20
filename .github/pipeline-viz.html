@@ -915,6 +915,7 @@ function skillLoaded(id) {
 }
 
 
+function showDropZone() {
   const board = document.getElementById('board');
   board.innerHTML = `
     <div id="drop-zone">
@@ -1295,6 +1296,68 @@ function renderGovernance(features) {
     }).length,
   }));
 
+  // Pre-compute all complex HTML fragments as local variables.
+  // RULE: never place IIFEs, block-body arrow functions, or nested template
+  // literals inside ${} of the outer board.innerHTML template literal.
+  // The JS parser chokes on the closing } of the block body and throws
+  // "Unexpected token '}'". Always hoist complex logic to a named variable first.
+
+  const skillsLoaded = GOVERNANCE_GATES.filter(g => skillLoaded(g.id)).length;
+  const skillsTotal  = GOVERNANCE_GATES.length;
+  let skillsBadgeHTML;
+  if (skillsLoaded === skillsTotal) {
+    skillsBadgeHTML = '<span class="skill-source-badge live">&#128196; ' + skillsLoaded + '/' + skillsTotal + ' skills live</span>';
+  } else if (skillsLoaded > 0) {
+    skillsBadgeHTML = '<span class="skill-source-badge partial">&#128196; ' + skillsLoaded + '/' + skillsTotal + ' skills live</span>';
+  } else {
+    skillsBadgeHTML = '<span class="skill-source-badge default" title="Open via VS Code Live Server or GitHub Pages to load live criteria from SKILL.md files">&#128203; default criteria (serve to load live)</span>';
+  }
+
+  const gateRefItemsHTML = GOVERNANCE_GATES.map(function(g) {
+    const live = skillLoaded(g.id);
+    const desc = skillCriteria(g.id) || g.criteria;
+    const badge = live ? 'live' : 'default';
+    return '<div class="gov-ref-item">'
+      + '<div class="gov-ref-item-head">'
+      + '<div class="name">' + esc(g.label) + '</div>'
+      + '<span class="skill-source-badge ' + badge + '">' + badge + '</span>'
+      + '</div>'
+      + '<div class="skill">Skill ' + esc(g.skill) + '</div>'
+      + '<div class="criteria">' + esc(desc) + '</div>'
+      + '</div>';
+  }).join('');
+
+  const metaRefItemsHTML = META_SKILL_REFS.map(function(m) {
+    const live = skillLoaded(m.id);
+    const desc = skillCriteria(m.id) || m.fallback;
+    const badge = live ? 'live' : 'default';
+    return '<div class="gov-ref-item">'
+      + '<div class="gov-ref-item-head">'
+      + '<div class="name">' + esc(m.label) + '</div>'
+      + '<span class="skill-source-badge ' + badge + '">' + badge + '</span>'
+      + '</div>'
+      + '<div class="skill">Skill ' + esc(m.skill) + '</div>'
+      + '<div class="criteria">' + esc(desc) + '</div>'
+      + '</div>';
+  }).join('');
+
+  const gateFailPillsHTML = gateFailCounts.map(function(gf) {
+    const active = governanceGateFilter === gf.gate.id ? ' filter-active' : '';
+    return '<button class="gov-pill fail' + active + '" data-action="filter-gov-gate" data-gate="' + esc(gf.gate.id) + '">'
+      + esc(gf.gate.label) + ' fails ' + gf.count + '</button>';
+  }).join('');
+
+  const colHeadersHTML = GOVERNANCE_GATES.map(function(g) {
+    return '<th>' + esc(g.label) + '<br><span style="font-size:9px;color:var(--muted)">' + esc(g.skill) + '</span></th>';
+  }).join('');
+
+  const matrixRowsHTML = rows.map(function(r) { return governanceRowHTML(r.feature, r.gates); }).join('');
+  const emptyFilterMsg = rows.length === 0 ? '<div class="aq-empty" style="margin-top:8px">No features currently failing the selected gate.</div>' : '';
+  const clearFilterBtn  = governanceGateFilter ? '<button class="gov-btn" data-action="clear-gov-filter">Clear gate filter</button>' : '';
+  const policyNote      = governanceStrictPolicy ? 'Warn statuses for regulated features are treated as fail.' : 'Warn and fail are shown separately.';
+  const policyBtnClass  = governanceStrictPolicy ? 'gov-btn active' : 'gov-btn';
+  const policyBtnLabel  = 'Strict policy mode ' + (governanceStrictPolicy ? 'ON' : 'OFF');
+
   board.innerHTML = `
     <div class="gov-summary">
       <span class="gov-pill">Features ${features.length}</span>
@@ -1303,75 +1366,30 @@ function renderGovernance(features) {
       <span class="gov-pill fail">Fail ${failCount}</span>
     </div>
     <div class="gov-controls">
-      <button class="gov-btn ${governanceStrictPolicy ? 'active' : ''}" data-action="toggle-gov-policy">Strict policy mode ${governanceStrictPolicy ? 'ON' : 'OFF'}</button>
+      <button class="${policyBtnClass}" data-action="toggle-gov-policy">${policyBtnLabel}</button>
       <button class="gov-btn" data-action="export-gov-csv">Export CSV</button>
-      ${governanceGateFilter ? `<button class="gov-btn" data-action="clear-gov-filter">Clear gate filter</button>` : ''}
-      <span class="gov-note">${governanceStrictPolicy ? 'Warn statuses for regulated features are treated as fail.' : 'Warn and fail are shown separately.'}</span>
+      ${clearFilterBtn}
+      <span class="gov-note">${policyNote}</span>
     </div>
-    <div class="gov-summary">
-      ${gateFailCounts.map(gf => `<button class="gov-pill fail ${governanceGateFilter === gf.gate.id ? 'filter-active' : ''}" data-action="filter-gov-gate" data-gate="${gf.gate.id}">${esc(gf.gate.label)} fails ${gf.count}</button>`).join('')}
-    </div>
+    <div class="gov-summary">${gateFailPillsHTML}</div>
     <div class="gov-ref">
       <div class="gov-ref-header">
         <h3>Gate Criteria Reference</h3>
-        ${(()=>{
-          const loaded = GOVERNANCE_GATES.filter(g => skillLoaded(g.id)).length;
-          const total  = GOVERNANCE_GATES.length;
-          return loaded === total
-            ? `<span class="skill-source-badge live">📄 ${loaded}/${total} skills live</span>`
-            : loaded > 0
-              ? `<span class="skill-source-badge partial">📄 ${loaded}/${total} skills live</span>`
-              : `<span class="skill-source-badge default" title="Open via VS Code Live Server or GitHub Pages to load live criteria from SKILL.md files">📋 default criteria (serve to load live)</span>`;
-        })()}
+        ${skillsBadgeHTML}
       </div>
-      <div class="gov-ref-grid">
-        ${GOVERNANCE_GATES.map(g => {
-          const live = skillLoaded(g.id);
-          const desc = skillCriteria(g.id) || g.criteria;
-          return `
-          <div class="gov-ref-item">
-            <div class="gov-ref-item-head">
-              <div class="name">${esc(g.label)}</div>
-              <span class="skill-source-badge ${live ? 'live' : 'default'}">${live ? 'live' : 'default'}</span>
-            </div>
-            <div class="skill">Skill ${esc(g.skill)}</div>
-            <div class="criteria">${esc(desc)}</div>
-          </div>`;
-        }).join('')}
-      </div>
+      <div class="gov-ref-grid">${gateRefItemsHTML}</div>
       <details class="gov-meta-ref">
         <summary>Pipeline authority skills (workflow &amp; org-mapping)</summary>
-        <div class="gov-ref-grid" style="margin-top:8px">
-          ${META_SKILL_REFS.map(m => {
-            const live = skillLoaded(m.id);
-            const desc = skillCriteria(m.id) || m.fallback;
-            return `
-            <div class="gov-ref-item">
-              <div class="gov-ref-item-head">
-                <div class="name">${esc(m.label)}</div>
-                <span class="skill-source-badge ${live ? 'live' : 'default'}">${live ? 'live' : 'default'}</span>
-              </div>
-              <div class="skill">Skill ${esc(m.skill)}</div>
-              <div class="criteria">${esc(desc)}</div>
-            </div>`;
-          }).join('')}
-        </div>
+        <div class="gov-ref-grid" style="margin-top:8px">${metaRefItemsHTML}</div>
       </details>
     </div>
     <div class="gov-matrix-wrap">
       <table class="gov-matrix">
-        <thead>
-          <tr>
-            <th>Feature</th>
-            ${GOVERNANCE_GATES.map(g => `<th>${esc(g.label)}<br><span style="font-size:9px;color:var(--muted)">${esc(g.skill)}</span></th>`).join('')}
-          </tr>
-        </thead>
-        <tbody>
-          ${rows.map(r => governanceRowHTML(r.feature, r.gates)).join('')}
-        </tbody>
+        <thead><tr><th>Feature</th>${colHeadersHTML}</tr></thead>
+        <tbody>${matrixRowsHTML}</tbody>
       </table>
     </div>
-    ${rows.length === 0 ? '<div class="aq-empty" style="margin-top:8px">No features currently failing the selected gate.</div>' : ''}`;
+    ${emptyFilterMsg}`;
 }
 
 function governanceRowHTML(feature, gateResults) {
