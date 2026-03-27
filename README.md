@@ -6,6 +6,20 @@ Designed to work for a single developer shipping a small feature and equally for
 
 ---
 
+## Typical flow (standard feature)
+
+For most features this is all you need. Invoke each skill by name in Copilot chat.
+
+![Skills pipeline flow — outer loop (discovery → release → measure/learn) wrapping the inner coding loop (branch-setup → subagent-execution → verify-completion)](.github/skills-pipeline-flow.jpg)
+
+**Start every session with `/workflow`** — it reads `pipeline-state.json` and tells you exactly which skill to run next.
+
+**Stuck or uncertain?** `/spike` for a scoped investigation. `/systematic-debugging` when a task is failing and a quick fix isn't obvious.
+
+**Bug or small fix?** Short-track: `/test-plan → /definition-of-ready → inner coding loop`.
+
+---
+
 ## Getting started
 
 ### 1. Create your repo and clone it
@@ -128,20 +142,6 @@ git remote add skills-upstream https://bitbucket.org/your-org/sdlc-skills.git
 Then set `strategy: manual` in `.github/context.yml → skills_upstream:`.
 
 > **Do not edit files under `.github/skills/` in your project repo.** All project-specific configuration lives in `copilot-instructions.md`, `context.yml`, and `architecture-guardrails.md`. This keeps upstream syncs safe — nothing to conflict with.
-
----
-
-## Typical flow (standard feature)
-
-For most features this is all you need. Invoke each skill by name in Copilot chat.
-
-![Skills pipeline flow — outer loop (discovery → release → measure/learn) wrapping the inner coding loop (branch-setup → subagent-execution → verify-completion)](.github/skills-pipeline-flow.jpg)
-
-**Start every session with `/workflow`** — it reads `pipeline-state.json` and tells you exactly which skill to run next.
-
-**Stuck or uncertain?** `/spike` for a scoped investigation. `/systematic-debugging` when a task is failing and a quick fix isn't obvious.
-
-**Bug or small fix?** Short-track: `/test-plan → /definition-of-ready → inner coding loop`.
 
 ---
 
