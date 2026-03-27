@@ -55,7 +55,7 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-# ── Constants ─────────────────────────────────────────────────────────────────
+# ─ Constants ─────────────────────────────────────────────────────────────────
 $OWNER  = 'heymishy'
 $REPO   = 'skills-repo'
 $BRANCH = 'master'
@@ -65,11 +65,11 @@ $ScriptDir  = Split-Path -Parent $MyInvocation.MyCommand.Path
 $SourceRoot = Split-Path -Parent $ScriptDir  # parent of scripts/ = repo root
 $UseLocal   = Test-Path (Join-Path $SourceRoot '.github\skills')
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
+# ── Helpers ──────────────────────────────────────────────────────────────────
 function Write-Info    ($m) { Write-Host "[install] $m" -ForegroundColor Cyan }
-function Write-OK      ($m) { Write-Host "  [✓] $m"    -ForegroundColor Green }
+function Write-OK      ($m) { Write-Host "  [OK] $m"    -ForegroundColor Green }
 function Write-Warn    ($m) { Write-Host "  [!] $m"    -ForegroundColor Yellow }
-function Write-Fail    ($m) { Write-Host "  [✗] $m"    -ForegroundColor Red }
+function Write-Fail    ($m) { Write-Host "  [FAIL] $m"    -ForegroundColor Red }
 
 function Copy-SkillFile {
     param([string]$SrcRel, [string]$DstAbs)
@@ -77,7 +77,7 @@ function Copy-SkillFile {
     $rel = $DstAbs.Replace($Target, '').TrimStart('\','/')
 
     if ($DryRun) {
-        Write-Host "  DRY-RUN: $SrcRel → $rel"
+        Write-Host "  DRY-RUN: $SrcRel -> $rel"
         return
     }
 
@@ -98,19 +98,19 @@ function Copy-SkillFile {
     Write-OK "Copied: $rel"
 }
 
-# ── Validate target ────────────────────────────────────────────────────────────
+# ── Validate target ───────────────────────────────────────────────────────────
 if (-not (Test-Path $Target)) {
     Write-Fail "Target directory does not exist: $Target"
     exit 1
 }
 
 Write-Host ""
-Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor DarkGray
+Write-Host "========================================================" -ForegroundColor DarkGray
 Write-Host "  Skills Pipeline Installer"
 Write-Host "  Target : $Target"
 Write-Host "  Profile: $Profile"
 Write-Host "  Mode   : $(if ($DryRun) { 'DRY RUN' } else { 'INSTALL' })"
-Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor DarkGray
+Write-Host "========================================================" -ForegroundColor DarkGray
 Write-Host ""
 
 if ((Test-Path (Join-Path $Target '.github\skills')) -and -not $Overwrite) {
@@ -119,7 +119,7 @@ if ((Test-Path (Join-Path $Target '.github\skills')) -and -not $Overwrite) {
     Write-Host ""
 }
 
-# ── Step 1: Core .github files ─────────────────────────────────────────────────
+# ── Step 1: Core .github files ────────────────────────────────────────────────
 Write-Info "Step 1/5: Core pipeline files"
 
 @(
@@ -133,7 +133,7 @@ Write-Info "Step 1/5: Core pipeline files"
     Copy-SkillFile $_ (Join-Path $Target $_)
 }
 
-# ── Step 2: Context profiles ───────────────────────────────────────────────────
+# ─ Step 2: Context profiles ───────────────────────────────────────────────────
 Write-Info "Step 2/5: Context profiles"
 
 Copy-SkillFile 'contexts/personal.yml' (Join-Path $Target 'contexts/personal.yml')
@@ -143,10 +143,10 @@ if (-not $DryRun) {
     $src = Join-Path $Target "contexts/$Profile.yml"
     $dst = Join-Path $Target '.github/context.yml'
     Copy-Item $src $dst -Force
-    Write-OK "Activated profile: $Profile → .github/context.yml"
+    Write-OK "Activated profile: $Profile -> .github/context.yml"
 }
 
-# ── Step 3: Skills ─────────────────────────────────────────────────────────────
+# ── Step 3: Skills ────────────────────────────────────────────────────────────
 Write-Info "Step 3/5: Skill files"
 
 $skills = @(
@@ -164,7 +164,7 @@ foreach ($skill in $skills) {
     Copy-SkillFile $rel (Join-Path $Target $rel)
 }
 
-# ── Step 4: Templates ─────────────────────────────────────────────────────────
+# ── Step 4: Templates ────────────────────────────────────────────────────────
 Write-Info "Step 4/5: Templates"
 
 $templates = @(
@@ -185,7 +185,7 @@ foreach ($tmpl in $templates) {
     Copy-SkillFile $rel (Join-Path $Target $rel)
 }
 
-# ── Step 5: Optional extras ────────────────────────────────────────────────────
+# ─ Step 5: Optional extras ────────────────────────────────────────────────────
 Write-Info "Step 5/5: Optional extras"
 
 # artefacts placeholder
@@ -207,25 +207,25 @@ foreach ($f in @('mission.md','roadmap.md','tech-stack.md','constraints.md')) {
 
 Copy-SkillFile 'config.yml' (Join-Path $Target 'config.yml')
 
-# GitHub Actions CI integration — only if target repo uses github-actions
+# GitHub Actions CI integration - only if target repo uses github-actions
 $ContextYml = Join-Path $Target '.github/context.yml'
 if ((Test-Path $ContextYml) -and (Select-String -Path $ContextYml -Pattern '\bci:\s+github-actions\b' -Quiet)) {
-    Write-Info "GitHub Actions CI detected — copying trace-validation workflow"
+    Write-Info "GitHub Actions CI detected - copying trace-validation workflow"
     Copy-SkillFile '.github/workflows/trace-validation.yml' (Join-Path $Target '.github/workflows/trace-validation.yml')
 } elseif (-not $DryRun) {
     $detectedCi = (Select-String -Path $ContextYml -Pattern 'ci:\s+(\S+)' | ForEach-Object { $_.Matches[0].Groups[1].Value } | Select-Object -First 1)
-    Write-Warn "CI platform is '$detectedCi' — skipping GitHub Actions workflow."
+    Write-Warn "CI platform is '$detectedCi' - skipping GitHub Actions workflow."
     Write-Warn "See .github/skills/trace/SKILL.md CI usage section for your platform's integration snippet."
 }
 
-# ── Placeholder prompts ───────────────────────────────────────────────────────
+# ── Placeholder prompts ──────────────────────────────────────────────────────
 if (-not $DryRun) {
     Write-Host ""
-    Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor DarkGray
+    Write-Host "========================================================" -ForegroundColor DarkGray
     Write-Host "  Two required placeholders need filling:"
     Write-Host ""
 
-    $productCtx    = Read-Host "  1. Product context (one sentence — what does this repo build?)"
+    $productCtx    = Read-Host "  1. Product context (one sentence - what does this repo build?)"
     $codingStandards = Read-Host "  2. Coding standards (language + test framework, e.g. TypeScript + Vitest)"
 
     $instrFile = Join-Path $Target '.github/copilot-instructions.md'
@@ -247,7 +247,7 @@ if (-not $DryRun) {
     }
 
     Write-Host ""
-    Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor DarkGray
+    Write-Host "========================================================" -ForegroundColor DarkGray
     Write-Host ""
     Write-OK "Install complete."
     Write-Host ""
@@ -259,10 +259,10 @@ if (-not $DryRun) {
     Write-Host ""
 }
 
-# ── Upstream remote setup ─────────────────────────────────────────────────────
+# ── Upstream remote setup ────────────────────────────────────────────────────
 if (-not $DryRun -and $UpstreamStrategy -ne 'none') {
     Write-Host ""
-    Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor DarkGray
+    Write-Host "========================================================" -ForegroundColor DarkGray
     Write-Info "Setting up skills-upstream remote ($UpstreamStrategy)"
 
     $remoteUrl = switch ($UpstreamStrategy) {
@@ -280,7 +280,7 @@ if (-not $DryRun -and $UpstreamStrategy -ne 'none') {
         # Check if skills-upstream already exists
         $existingRemotes = git remote 2>$null
         if ($existingRemotes -contains 'skills-upstream') {
-            Write-Warn "'skills-upstream' remote already exists — updating URL"
+            Write-Warn "'skills-upstream' remote already exists - updating URL"
             git remote set-url skills-upstream $remoteUrl
         } else {
             git remote add skills-upstream $remoteUrl

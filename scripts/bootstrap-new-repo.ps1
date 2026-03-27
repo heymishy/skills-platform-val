@@ -52,19 +52,18 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$CYAN  = "`e[36m"; $GREEN = "`e[32m"; $YELLOW = "`e[33m"; $RESET = "`e[0m"
-function info($m)    { Write-Host "${CYAN}[bootstrap]${RESET} $m" }
-function success($m) { Write-Host "${GREEN}[✓]${RESET} $m" }
-function warn($m)    { Write-Host "${YELLOW}[!]${RESET} $m" }
+function info($m)    { Write-Host "[bootstrap] $m" -ForegroundColor Cyan }
+function success($m) { Write-Host "[OK] $m" -ForegroundColor Green }
+function warn($m)    { Write-Host "[!] $m" -ForegroundColor Yellow }
 
-# ── Clone skills repo to temp ─────────────────────────────────────────────────
+#  Clone skills repo to temp 
 $TempDir = Join-Path $env:TEMP "skills-repo-$(Get-Random)"
 info "Cloning heymishy/skills-repo to $TempDir ..."
 git clone --depth 1 --quiet https://github.com/heymishy/skills-repo.git $TempDir
 if ($LASTEXITCODE -ne 0) { Write-Error "git clone failed."; exit 1 }
 success "Cloned."
 
-# ── Run installer ─────────────────────────────────────────────────────────────
+#  Run installer 
 $installArgs = @{
     Target           = $Target
     Profile          = $Profile
@@ -77,7 +76,7 @@ info "Running installer (profile: $Profile, upstream: $UpstreamStrategy) ..."
 & "$TempDir\scripts\install.ps1" @installArgs
 $exitCode = $LASTEXITCODE
 
-# ── Clean up ──────────────────────────────────────────────────────────────────
+#  Clean up 
 Remove-Item -Recurse -Force $TempDir
 success "Cleaned up temp clone."
 
