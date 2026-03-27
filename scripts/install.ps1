@@ -222,11 +222,20 @@ if ((Test-Path $ContextYml) -and (Select-String -Path $ContextYml -Pattern '\bci
 if (-not $DryRun) {
     Write-Host ""
     Write-Host "========================================================" -ForegroundColor DarkGray
-    Write-Host "  Two required placeholders need filling:"
+    Write-Host "  Two quick questions - these go into copilot-instructions.md"
+    Write-Host "  and are loaded into every Copilot interaction in this repo."
+    Write-Host "  They tell the agent what you are building and how you build it."
     Write-Host ""
-
-    $productCtx    = Read-Host "  1. Product context (one sentence - what does this repo build?)"
-    $codingStandards = Read-Host "  2. Coding standards (language + test framework, e.g. TypeScript + Vitest)"
+    Write-Host "  Product context - Copilot uses this to frame all decisions:"
+    Write-Host "  what problem does this repo solve, for whom, and why."
+    Write-Host "  Example: 'A prioritisation canvas tool for workshop facilitators."
+    Write-Host "           Teams plot ideas on a 2x2 grid and export results.'"
+    $productCtx    = Read-Host "  > Your product context (one or two sentences)"
+    Write-Host ""
+    Write-Host "  Coding standards - Copilot uses this to match your stack when"
+    Write-Host "  generating code: language, framework, test tool, lint rules."
+    Write-Host "  Example: 'TypeScript, React, Vitest, ESLint Airbnb'"
+    $codingStandards = Read-Host "  > Your language + framework + test tool"
 
     $instrFile = Join-Path $Target '.github/copilot-instructions.md'
     if (Test-Path $instrFile) {

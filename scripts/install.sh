@@ -221,11 +221,20 @@ fi
 if [[ "$DRY_RUN" == false ]]; then
   echo ""
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo "  Two required placeholders need filling:"
+  echo "  Two quick questions - these go into copilot-instructions.md"
+  echo "  and are loaded into every Copilot interaction in this repo."
+  echo "  They tell the agent what you are building and how you build it."
   echo ""
-
-  read -r -p "  1. Product context (one sentence — what does this repo build?): " PRODUCT_CONTEXT
-  read -r -p "  2. Coding standards (language + test framework, e.g. TypeScript + Vitest): " CODING_STANDARDS
+  echo "  Product context - Copilot uses this to frame all decisions:"
+  echo "  what problem does this repo solve, for whom, and why."
+  echo "  Example: 'A prioritisation canvas for workshop facilitators."
+  echo "           Teams plot ideas on a 2x2 grid and export results.'"
+  read -r -p "  > Your product context (one or two sentences): " PRODUCT_CONTEXT
+  echo ""
+  echo "  Coding standards - Copilot uses this to match your stack when"
+  echo "  generating code: language, framework, test tool, lint rules."
+  echo "  Example: TypeScript, React, Vitest, ESLint Airbnb"
+  read -r -p "  > Your language + framework + test tool: " CODING_STANDARDS
 
   # Substitute into copilot-instructions.md
   INSTR_FILE="$TARGET_DIR/.github/copilot-instructions.md"
