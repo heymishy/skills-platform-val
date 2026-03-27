@@ -6,6 +6,36 @@ All notable changes to this repository will be documented in this file.
 
 ---
 
+## [0.3.0] — 2026-03-28
+
+### Added
+
+#### Bootstrap wrapper scripts
+- New `scripts/bootstrap-new-repo.ps1` and `scripts/bootstrap-new-repo.sh` — thin wrappers that clone skills-repo to a temp directory, run the installer against a target repo, and clean up. Reduces setup to a single one-liner.
+- `bootstrap-new-repo.sh` uses a `trap` for guaranteed cleanup on failure.
+
+#### Upstream sync strategy (install scripts + bootstrap skill)
+- `scripts/install.ps1`: new `-UpstreamStrategy none|remote|fork` and `-UpstreamUrl` parameters; post-install block adds `skills-upstream` git remote and writes a `skills_upstream:` block to `context.yml`
+- `scripts/install.sh`: equivalent `--upstream-strategy` / `--upstream-url` flags and bash upstream remote setup block
+- `bootstrap/SKILL.md`: new Step 3d — interactive three-option remote/upstream prompt (A: simple re-install, B: git remote, C: enterprise fork)
+
+#### Agent awareness of upstream remote
+- `copilot-instructions.md` template: new **Skills pipeline maintenance** section — agent reads `context.yml → skills_upstream:` when asked to check or sync upstream updates; includes copy-paste sync commands and guidance for when remote is null
+- `contexts/personal.yml`: `skills_upstream:` block pre-populated with `heymishy/skills-repo` as default upstream; `strategy: none` until user wires the remote
+- `contexts/work.yml`: `skills_upstream:` block with `repo: null` placeholder showing expected org fork URL format; `fork_of:` pre-set to `heymishy/skills-repo`
+
+### Fixed
+
+- `install.ps1`: replaced all non-ASCII characters (`✓`, `✗`, `→`, `—`, `━`) in string literals with ASCII equivalents (`[OK]`, `[FAIL]`, `->`, `-`, `===`) — PowerShell 5.1 reads UTF-8 files without a BOM as Windows-1252, causing `E2 9C 93` (`✓`) to decode as a right-double-quote and break all string literals from line 70 onwards
+- `bootstrap-new-repo.ps1`: replaced `` `e[...m `` ANSI escape helpers (PS 7+ only) with `Write-Host -ForegroundColor` (PS 5.1 compatible)
+
+### Changed
+
+- README: new **Getting started** section near the top with step-by-step instructions (create repo, install, fill placeholders, choose profile, commit, run `/workflow`, pull future updates)
+- Install prompt UX: both scripts now explain *why* each placeholder is needed, show an example, and note that both values can be changed later in `copilot-instructions.md`
+
+---
+
 ## [0.2.0] — 2026-03-28
 
 ### Added — Feature additions batch (`a94faa6`, `4dec711`, `d104381`, `6f40c2f`)

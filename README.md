@@ -107,6 +107,8 @@ git push -u origin master
 
 ### Pulling future skills updates
 
+The upstream remote and repo URL are stored in `.github/context.yml → skills_upstream:`. You can ask Copilot to check for updates — it reads that block automatically.
+
 ```bash
 git fetch skills-upstream
 git diff HEAD skills-upstream/master -- .github/skills/   # review what changed
@@ -114,6 +116,16 @@ git checkout skills-upstream/master -- .github/skills/ .github/templates/ script
 git diff --staged
 git commit -m "chore: sync skills from skills-upstream $(date +%Y-%m-%d)"
 ```
+
+If `skills-upstream` isn't wired yet, add it first:
+```bash
+# Personal:
+git remote add skills-upstream https://github.com/heymishy/skills-repo.git
+
+# Enterprise fork:
+git remote add skills-upstream https://bitbucket.org/your-org/sdlc-skills.git
+```
+Then set `strategy: manual` in `.github/context.yml → skills_upstream:`.
 
 > **Do not edit files under `.github/skills/` in your project repo.** All project-specific configuration lives in `copilot-instructions.md`, `context.yml`, and `architecture-guardrails.md`. This keeps upstream syncs safe — nothing to conflict with.
 
