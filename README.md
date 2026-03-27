@@ -12,7 +12,7 @@ Designed to work for a single developer shipping a small feature and equally for
 
 **GitHub (personal / small team):**
 ```bash
-# Option A — GitHub CLI
+# Option A — GitHub CLI (creates on GitHub and clones locally in one step)
 gh repo create my-project --private --clone
 cd my-project
 
