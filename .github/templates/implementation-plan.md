@@ -6,7 +6,7 @@
   with expected output, and a commit message.
   The implementing agent has zero codebase context — be explicit about everything.
   
-  Save to: .github/artefacts/[feature]/plans/[story-slug]-plan.md
+  Save to: artefacts/[feature]/plans/[story-slug]-plan.md
   
   To evolve: update templates/implementation-plan.md and open a PR.
 -->

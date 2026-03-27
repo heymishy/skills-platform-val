@@ -2,7 +2,7 @@
 
 **Feature:** [feature-slug]
 **Date:** [YYYY-MM-DD]
-**Artefact path:** `.github/artefacts/[feature-slug]/research/ideation.md`
+**Artefact path:** `artefacts/[feature-slug]/research/ideation.md`
 **Lenses run:** [A / B / C / D / E — list those completed]
 **Pipeline state signal:** [proceed / redesign / defer / in-progress]
 

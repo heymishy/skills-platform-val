@@ -4,7 +4,7 @@
   USAGE: Produced by /release for regulated, audited, or programme-gated releases.
   A reference index of all pipeline artefacts for the stories in scope.
   
-  Save to: .github/artefacts/[feature]/release/[version]-compliance-bundle.md
+  Save to: artefacts/[feature]/release/[version]-compliance-bundle.md
   
   To evolve: update templates/compliance-bundle.md and open a PR.
 -->
@@ -18,14 +18,14 @@
 
 | Evidence type | Artefact path | Date | Status |
 |---------------|--------------|------|--------|
-| Story definition | `.github/artefacts/[feature]/stories/[slug].md` | [date] | Approved |
-| Review report | `.github/artefacts/[feature]/review/[slug]-review-N.md` | [date] | PASS Run [N] |
-| Test plan | `.github/artefacts/[feature]/test-plans/[slug]-test-plan.md` | [date] | [n] tests |
-| AC verification script | `.github/artefacts/[feature]/verification-scripts/[slug]-verification.md` | [date] | Present |
-| Definition of Ready | `.github/artefacts/[feature]/dor/[slug]-dor.md` | [date] | Signed off |
-| Definition of Done | `.github/artefacts/[feature]/dod/[slug]-dod.md` | [date] | COMPLETE |
-| Decisions log | `.github/artefacts/[feature]/decisions.md` | [date] | Present |
-| Benefit metric | `.github/artefacts/[feature]/benefit-metric.md` | [date] | Active |
+| Story definition | `artefacts/[feature]/stories/[slug].md` | [date] | Approved |
+| Review report | `artefacts/[feature]/review/[slug]-review-N.md` | [date] | PASS Run [N] |
+| Test plan | `artefacts/[feature]/test-plans/[slug]-test-plan.md` | [date] | [n] tests |
+| AC verification script | `artefacts/[feature]/verification-scripts/[slug]-verification.md` | [date] | Present |
+| Definition of Ready | `artefacts/[feature]/dor/[slug]-dor.md` | [date] | Signed off |
+| Definition of Done | `artefacts/[feature]/dod/[slug]-dod.md` | [date] | COMPLETE |
+| Decisions log | `artefacts/[feature]/decisions.md` | [date] | Present |
+| Benefit metric | `artefacts/[feature]/benefit-metric.md` | [date] | Active |
 
 ---
 

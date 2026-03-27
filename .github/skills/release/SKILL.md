@@ -106,7 +106,7 @@ If `context.yml` is absent or `regulated: false`, ask:
 If **1 — Compliance bundle:**
 
 Conforms to `templates/compliance-bundle.md`.
-Save to `.github/artefacts/[feature]/release/[version]-compliance-bundle.md`.
+Save to `artefacts/[feature]/release/[version]-compliance-bundle.md`.
 
 If any artefact is missing from the bundle:
 
@@ -185,7 +185,7 @@ If 3:
 ## Output 1: Release notes — technical
 
 Conforms to `.github/templates/release-notes-technical.md`.
-Save to `.github/artefacts/[feature]/release/[version]-release-notes-technical.md`.
+Save to `artefacts/[feature]/release/[version]-release-notes-technical.md`.
 
 If `context.tools.monitoring` is configured: add a rollback trigger condition
 referencing the monitoring platform's alerting or problem feed.
@@ -199,7 +199,7 @@ in the header with the CI build URL.
 ## Output 2: Release notes — plain language
 
 Conforms to `.github/templates/release-notes-plain.md`.
-Save to `.github/artefacts/[feature]/release/[version]-release-notes-plain.md`.
+Save to `artefacts/[feature]/release/[version]-release-notes-plain.md`.
 
 Plain language rules:
 - No technical terms without explanation
@@ -213,7 +213,7 @@ Plain language rules:
 ## Output 3: Change request body
 
 Conforms to `.github/templates/change-request.md`.
-Save to `.github/artefacts/[feature]/release/[version]-change-request.md`.
+Save to `artefacts/[feature]/release/[version]-change-request.md`.
 
 Produce a complete change request ready to paste into the change management tool.
 Do not leave fields blank — if information is missing, state what is needed and
@@ -235,7 +235,7 @@ If `context.tools.ci_platform` is configured: link the CI build URL in the test 
 ## Output 4: Deployment checklist
 
 Conforms to `.github/templates/deployment-checklist.md`.
-Save to `.github/artefacts/[feature]/release/[version]-deployment-checklist.md`.
+Save to `artefacts/[feature]/release/[version]-deployment-checklist.md`.
 
 If `context.tools.monitoring` is configured: add the monitoring dashboard URL,
 a synthetic monitor check in post-deployment verification, and the monitoring

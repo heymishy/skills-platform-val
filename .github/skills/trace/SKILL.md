@@ -140,7 +140,7 @@ If `.github/architecture-guardrails.md` does not exist:
 ## Output format
 
 Conforms to `.github/templates/trace-report.md`.
-Save to `.github/artefacts/[feature]/trace/[date]-trace.md`.
+Save to `artefacts/[feature]/trace/[date]-trace.md`.
 
 ---
 
@@ -150,7 +150,7 @@ When triggered on PR open, post a condensed comment:
 
 > **Trace check**
 > Chain: ✅ Healthy / ⚠️ [n] warnings / ❌ [n] broken links
-> [If issues:] Full report: `.github/artefacts/[feature]/trace/[date]-trace.md`
+> [If issues:] Full report: `artefacts/[feature]/trace/[date]-trace.md`
 
 ---
 

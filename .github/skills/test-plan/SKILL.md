@@ -24,7 +24,7 @@ triggers:
 
 Before asking anything, verify:
 
-1. Story artefact exists at `.github/artefacts/[feature]/stories/[story-slug].md`
+1. Story artefact exists at `artefacts/[feature]/stories/[story-slug].md`
 2. Review report exists showing PASS (no unresolved HIGH findings)
 3. Story has at least 3 ACs in Given/When/Then format
 
@@ -223,7 +223,7 @@ Produce the technical plan first, then derive the verification script from it.
 ## Output 1: Technical test plan
 
 Conforms to `.github/templates/test-plan.md`.
-Save to `.github/artefacts/[feature]/test-plans/[story-slug]-test-plan.md`.
+Save to `artefacts/[feature]/test-plans/[story-slug]-test-plan.md`.
 
 ### TDD discipline
 
@@ -271,7 +271,7 @@ Follow the gap table format from `templates/test-plan.md`.
 ## Output 2: AC verification script
 
 Conforms to `.github/templates/ac-verification-script.md`.
-Save to `.github/artefacts/[feature]/verification-scripts/[story-slug]-verification.md`.
+Save to `artefacts/[feature]/verification-scripts/[story-slug]-verification.md`.
 
 ### Translation rules
 
@@ -303,11 +303,11 @@ Write it so it works equally well for all three without modification:
 
 > **Test plan complete for [story title] ✅**
 >
-> Technical test plan: `.github/artefacts/[feature]/test-plans/[story-slug]-test-plan.md`
+> Technical test plan: `artefacts/[feature]/test-plans/[story-slug]-test-plan.md`
 > [n] unit | [n] integration | [n] NFR tests | [n] ACs covered
 > [If gaps:] ⚠️ [n] gap(s) — represented as manual scenarios
 >
-> Verification script: `.github/artefacts/[feature]/verification-scripts/[story-slug]-verification.md`
+> Verification script: `artefacts/[feature]/verification-scripts/[story-slug]-verification.md`
 > [n] scenarios | [n] edge cases | [n] manual gap scenarios
 >
 > Test data: [Synthetic / ready / ⚠️ gap — see plan]

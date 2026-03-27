@@ -52,10 +52,10 @@ discovery, or before starting any formal pipeline stage.
 Before asking anything, check what artefacts exist for the current feature or
 project. Look for:
 
--- `.github/artefacts/[feature-slug]/reference/` - source documents
-- `.github/artefacts/[feature-slug]/discovery.md`
-- `.github/artefacts/[feature-slug]/benefit-metric.md`
--- `.github/artefacts/[feature-slug]/stories/` - any stories already written
+-- `artefacts/[feature-slug]/reference/` - source documents
+- `artefacts/[feature-slug]/discovery.md`
+- `artefacts/[feature-slug]/benefit-metric.md`
+-- `artefacts/[feature-slug]/stories/` - any stories already written
 -- `.github/pipeline-state.json` - current feature list and stages
 
 State what you found:
@@ -571,7 +571,7 @@ The job story feeds directly into:
 ## Output
 
 Conforms to `.github/templates/ideation.md`.
-Save to `.github/artefacts/[feature-slug]/research/ideation.md`.
+Save to `artefacts/[feature-slug]/research/ideation.md`.
 
 One file per session. If this is the second ideation session for the same
 feature, create `ideation-2.md` and note what changed from the first.
@@ -610,7 +610,7 @@ artefact can be used to revise scope before proceeding to `/definition`.
 
 Update `.github/pipeline-state.json` in the **project repository** when the ideation artefact is saved:
 
-- Set `ideationPath: ".github/artefacts/[feature-slug]/research/ideation.md"` on the feature object
+- Set `ideationPath: "artefacts/[feature-slug]/research/ideation.md"` on the feature object
 - If Lens D was run and recommendation is PROCEED: set `ideationSignal: "proceed"`
 - If REDESIGN: set `ideationSignal: "redesign"`
 - If DEFER: set `ideationSignal: "defer"`

@@ -79,7 +79,7 @@ Add a script entry to the consuming repo's `package.json`:
 ```
 
 Create `.github/scripts/coverage-map.js` with content to reproduce the terminal output.
-The script reads `.github/artefacts/[feature-slug]/test-plans/*.md` and
+The script reads `artefacts/[feature-slug]/test-plans/*.md` and
 `.github/pipeline-state.json`, and prints:
 
 **For non-Node.js projects**, skip the `package.json` entry and the `.js` script.
@@ -124,7 +124,7 @@ Produce Output 2 (markdown) and Output 3 (HTML) only — those are runtime-agnos
 
 ## Output 2 — Markdown artefact
 
-Save to `.github/artefacts/[feature-slug]/coverage/coverage-map.md`.
+Save to `artefacts/[feature-slug]/coverage/coverage-map.md`.
 
 **View 1 — Per-AC table (collapsed by story using `<details>` tags):**
 
@@ -171,7 +171,7 @@ in the repo**, generate a standalone HTML file and note in its header:
      To embed: paste the <section id="coverage-[feature-slug]"> block into the visualisation. -->
 ```
 
-**Always generate:** `.github/artefacts/[feature-slug]/coverage/coverage-map.html`
+**Always generate:** `artefacts/[feature-slug]/coverage/coverage-map.html`
 
 **HTML structure:**
 
@@ -301,6 +301,6 @@ in the repo**, generate a standalone HTML file and note in its header:
 
 Update `.github/pipeline-state.json` in the **project repository** on the feature object:
 
-- Set `coverageMapPath: ".github/artefacts/[feature-slug]/coverage/coverage-map.md"`
+- Set `coverageMapPath: "artefacts/[feature-slug]/coverage/coverage-map.md"`
 - Set `coverageRisk: "red"` if any story has any 🔴 AC; `"yellow"` if any 🟡 AC and no 🔴; `"green"` if all ACs are 🟢
 - Set `updatedAt: [now]` on the feature record

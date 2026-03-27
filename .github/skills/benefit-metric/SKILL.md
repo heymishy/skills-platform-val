@@ -22,11 +22,11 @@ triggers:
 
 Before asking anything, verify:
 
-1. Discovery artefact exists at `.github/artefacts/[feature]/discovery.md`
+1. Discovery artefact exists at `artefacts/[feature]/discovery.md`
 2. Status field reads "Approved" - not "Draft"
 3. Discovery contains problem statement, MVP scope, and directional success indicators
 
-Also check for reference materials at `.github/artefacts/[feature]/reference/`.
+Also check for reference materials at `artefacts/[feature]/reference/`.
 If present, scan for:
 - Business case documents (benefits realisation plans, investment proposals)
 - Outcome or OKR documents
@@ -173,7 +173,7 @@ If a metric fails any check, raise it before finalising:
 
 ## Output
 
-Save to `.github/artefacts/[feature]/benefit-metric.md` using
+Save to `artefacts/[feature]/benefit-metric.md` using
 `.github/templates/benefit-metric.md`. Every field must be populated or explicitly
 explained as unknown.
 

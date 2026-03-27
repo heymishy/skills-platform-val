@@ -12,7 +12,7 @@
   - Coding agent (Constraints block in DoR artefact — agent must not violate these)
 
   Project-level ADRs that span multiple features live in this file (## Active ADRs).
-  Per-feature decisions live in .github/artefacts/[feature]/decisions.md
+  Per-feature decisions live in artefacts/[feature]/decisions.md
 
   To evolve: update this file, open a PR, tag engineering lead + architecture lead.
   Adding a guardrail here automatically propagates it into all downstream pipeline checks.
@@ -143,7 +143,7 @@
 
 <!--
   Architectural decisions that affect all features in this repository.
-  Per-feature decisions live in .github/artefacts/[feature]/decisions.md
+  Per-feature decisions live in artefacts/[feature]/decisions.md
 
   Format: ADR-[N] | Status | Title | What it constrains
   Status: Active | Superseded by ADR-[N] | Deprecated

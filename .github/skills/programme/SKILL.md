@@ -28,7 +28,7 @@ None. Can run at any point.
 
 On invocation:
 
-1. If a programme artefact **already exists** at `.github/artefacts/[programme-slug]/programme.md` → go directly to [Programme health view](#programme-health-view)
+1. If a programme artefact **already exists** at `artefacts/[programme-slug]/programme.md` → go directly to [Programme health view](#programme-health-view)
 2. If arriving from `/workflow` route 5 and qualification has already been confirmed → go directly to [Programme setup](#programme-setup)
 3. Otherwise → run [Step 0 — Qualification](#step-0--qualification) first
 
@@ -171,7 +171,7 @@ Then:
 > Reply: list workstreams with team names
 
 For each workstream, confirm the feature slug and create a placeholder artefact
-path at `.github/artefacts/[workstream-slug]/` if it doesn't exist.
+path at `artefacts/[workstream-slug]/` if it doesn't exist.
 
 Record each workstream in the programme artefact with:
 - Slug
@@ -214,7 +214,7 @@ If programme type is a service or library rewrite:
 >
 > Reply: list consumers — or type "unknown, will identify during discovery"
 
-Create `.github/artefacts/[programme-slug]/consumer-registry.md` from
+Create `artefacts/[programme-slug]/consumer-registry.md` from
 `.github/templates/consumer-registry.md`.
 
 ---
@@ -222,7 +222,7 @@ Create `.github/artefacts/[programme-slug]/consumer-registry.md` from
 ### Step 6 — Programme artefact
 
 Conforms to `.github/templates/programme.md`.
-Save to `.github/artefacts/[programme-slug]/programme.md`.
+Save to `artefacts/[programme-slug]/programme.md`.
 
 Output completion:
 

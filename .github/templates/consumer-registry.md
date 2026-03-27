@@ -6,7 +6,7 @@
   programmes to ensure no consumer is left behind.
 
   This file lives at:
-  .github/artefacts/[programme-slug]/consumer-registry.md
+  artefacts/[programme-slug]/consumer-registry.md
 
   Created by /programme (Step 5) when programme type is "service or library rewrite".
   Updated as consumers migrate. Referenced by /release when producing

@@ -20,8 +20,8 @@ triggers:
 
 ## Entry condition
 
-1. DoR artefact at `.github/artefacts/[feature]/dor/[story-slug]-dor.md` with `Proceed: Yes`
-2. Test plan at `.github/artefacts/[feature]/test-plans/[story-slug]-test-plan.md`
+1. DoR artefact at `artefacts/[feature]/dor/[story-slug]-dor.md` with `Proceed: Yes`
+2. Test plan at `artefacts/[feature]/test-plans/[story-slug]-test-plan.md`
 3. Worktree exists — run /branch-setup first if not
 
 If not met:
@@ -88,7 +88,7 @@ Ask for confirmation before writing tasks:
 ## Step 3 — Write the plan
 
 Conforms to `.github/templates/implementation-plan.md`.
-Save to `.github/artefacts/[feature]/plans/[story-slug]-plan.md`.
+Save to `artefacts/[feature]/plans/[story-slug]-plan.md`.
 
 Populate one Task block per AC (or per logical behaviour if an AC is broad).
 Follow the file map produced in Step 2. Every task must have:
@@ -124,11 +124,11 @@ Fix any issues before saving.
 
 ## Step 5 — Save and hand off
 
-Save to `.github/artefacts/[feature]/plans/[story-slug]-plan.md`.
+Save to `artefacts/[feature]/plans/[story-slug]-plan.md`.
 
 > ✅ **Implementation plan saved**
 >
-> Path: `.github/artefacts/[feature]/plans/[story-slug]-plan.md`
+> Path: `artefacts/[feature]/plans/[story-slug]-plan.md`
 > Tasks: [N]
 > ACs covered: [N]/[N]
 >
@@ -152,7 +152,7 @@ Save to `.github/artefacts/[feature]/plans/[story-slug]-plan.md`.
 ## Integration
 
 **Reads:** DoR artefact, test plan, AC verification script, story artefact
-**Produces:** `.github/artefacts/[feature]/plans/[story-slug]-plan.md`
+**Produces:** `artefacts/[feature]/plans/[story-slug]-plan.md`
 **Follows:** /branch-setup
 **Precedes:** /subagent-execution or /tdd (task by task)
 
@@ -171,7 +171,7 @@ Update `.github/pipeline-state.json` in the **project repository** when the impl
     "id": "task-1",
     "name": "Short task title",
     "tddState": "not-started",
-    "file": ".github/artefacts/[feature-slug]/plans/[story-slug]-plan.md"
+    "file": "artefacts/[feature-slug]/plans/[story-slug]-plan.md"
   }
   ```
   Set `file` to the path of the plan artefact (all tasks in a story share the same plan file). The visualiser will render each task name as a clickable link to the plan markdown.

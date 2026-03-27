@@ -15,9 +15,9 @@ Active pipeline context: `.github/context.yml`
 <!--
   context.yml holds toolchain settings (source control platform, test framework,
   roles, CI, ITSM, compliance frameworks, etc.) and is read by all skills.
-  To switch profiles: cp .github/contexts/personal.yml .github/context.yml
-                   or: cp .github/contexts/work.yml    .github/context.yml
-  Available profiles: .github/contexts/personal.yml | .github/contexts/work.yml
+  To switch profiles: cp contexts/personal.yml .github/context.yml
+                   or: cp contexts/work.yml    .github/context.yml
+  Available profiles: contexts/personal.yml | contexts/work.yml
 -->
 
 ---
@@ -140,10 +140,10 @@ When reviewing artefacts, check them against the template — missing fields are
 
 ## Artefact storage
 
-All pipeline artefacts are saved to `.github/artefacts/[feature-slug]/`:
+All pipeline artefacts are saved to `artefacts/[feature-slug]/`:
 
 ```
-.github/artefacts/[feature-slug]/
+artefacts/[feature-slug]/
   reference/
     reference-index.md            ← index of all uploaded source documents
     [scoping-doc.pdf / .pptx / .docx ...]
@@ -201,7 +201,7 @@ If you are picking up a feature after a break:
 ### Ending a session
 
 Before closing a session:
-1. Confirm any artefacts produced during the session have been saved to `.github/artefacts/`
+1. Confirm any artefacts produced during the session have been saved to `artefacts/`
 2. Note the current pipeline stage in a brief comment on the relevant artefact
 3. If you have uncommitted artefact files, commit them with a message that names the stage:
    e.g. `chore: add discovery artefact for [feature]` or `chore: add test plan for [story]`
@@ -254,7 +254,7 @@ application/interface/domain entries in the EA registry repo and use `/ea-regist
 to feed dependency context into delivery repos.
 
 > Per-feature decisions are recorded by /decisions and live in
-> `.github/artefacts/[feature]/decisions.md`.
+> `artefacts/[feature]/decisions.md`.
 > Structural decisions that constrain future features should also be added to
 > `.github/architecture-guardrails.md` as a repo-level ADR.
 

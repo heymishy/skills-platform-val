@@ -72,8 +72,8 @@ Recommend updates to:
 Use template: `.github/templates/org-mapping.md`
 
 Save to:
-- `.github/artefacts/[programme-slug]/org-mapping.md`
-- Or `.github/artefacts/[feature-slug]/org-mapping.md` for bounded pilots
+- `artefacts/[programme-slug]/org-mapping.md`
+- Or `artefacts/[feature-slug]/org-mapping.md` for bounded pilots
 
 ---
 

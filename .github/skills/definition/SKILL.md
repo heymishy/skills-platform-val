@@ -22,11 +22,11 @@ triggers:
 
 Before asking anything, verify:
 
-1. Discovery artefact exists at `.github/artefacts/[feature]/discovery.md` - status "Approved"
-2. Benefit-metric artefact exists at `.github/artefacts/[feature]/benefit-metric.md`
+1. Discovery artefact exists at `artefacts/[feature]/discovery.md` - status "Approved"
+2. Benefit-metric artefact exists at `artefacts/[feature]/benefit-metric.md`
 3. Benefit-metric artefact contains at least one metric with a defined target
 
-Also check for reference materials at `.github/artefacts/[feature]/reference/`.
+Also check for reference materials at `artefacts/[feature]/reference/`.
 If present, scan for technical designs, scoping documents, or programme-level
 constraints that should shape story decomposition and are not yet reflected in
 the discovery or benefit-metric artefacts. Surface any that are relevant before
@@ -130,7 +130,7 @@ Present the proposed epic grouping before writing:
 > Does this grouping make sense, or do you want to reorganise?
 > Reply: looks good — or describe how to reorganise
 
-Save each epic to `.github/artefacts/[feature]/epics/[epic-slug].md`
+Save each epic to `artefacts/[feature]/epics/[epic-slug].md`
 conforming to `.github/templates/epic.md`.
 
 ---
@@ -177,7 +177,7 @@ If migration story template confirmed: write the story using
 >
 > Reply: 1, 2, or 3
 
-Save each story to `.github/artefacts/[feature]/stories/[story-slug].md`
+Save each story to `artefacts/[feature]/stories/[story-slug].md`
 
 ---
 
@@ -275,8 +275,8 @@ approved scope note).
 
 > **Definition complete ✅**
 >
-> Epics: [n] at `.github/artefacts/[feature]/epics/`
-> Stories: [n] at `.github/artefacts/[feature]/stories/`
+> Epics: [n] at `artefacts/[feature]/epics/`
+> Stories: [n] at `artefacts/[feature]/stories/`
 > Slicing strategy: [chosen strategy]
 > Scope check: ✅ Clean / ⚠️ [n] additions approved / ⚠️ Review needed
 >

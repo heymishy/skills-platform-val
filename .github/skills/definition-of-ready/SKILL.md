@@ -22,10 +22,10 @@ triggers:
 
 Before asking anything, verify:
 
-1. Story artefact exists at `.github/artefacts/[feature]/stories/[story-slug].md`
+1. Story artefact exists at `artefacts/[feature]/stories/[story-slug].md`
 2. Review report exists showing PASS (no unresolved HIGH findings)
-3. Test plan exists at `.github/artefacts/[feature]/test-plans/[story-slug]-test-plan.md`
-4. AC verification script exists at `.github/artefacts/[feature]/verification-scripts/[story-slug]-verification.md`
+3. Test plan exists at `artefacts/[feature]/test-plans/[story-slug]-test-plan.md`
+4. AC verification script exists at `artefacts/[feature]/verification-scripts/[story-slug]-verification.md`
 
 If not met:
 
@@ -141,7 +141,7 @@ Produced when all hard blocks pass. Written into the DoR artefact.
 
 Conforms to the `## Coding Agent Instructions` section of `templates/definition-of-ready-checklist.md`.
 
-Save DoR artefact to `.github/artefacts/[feature]/dor/[story-slug]-dor.md`
+Save DoR artefact to `artefacts/[feature]/dor/[story-slug]-dor.md`
 conforming to `.github/templates/definition-of-ready-checklist.md`.
 
 ---

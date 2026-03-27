@@ -93,7 +93,7 @@ All notable changes to this repository will be documented in this file.
   - Implemented in `514e8ab`.
 - Made release generation context-driven using `.github/context.yml` tool and governance fields.
   - Implemented in `d92b4cb`.
-- Added explicit active-context mechanism and profile strategy (`.github/context.yml` + `.github/contexts/*`).
+- Added explicit active-context mechanism and profile strategy (`.github/context.yml` + `contexts/*`).
   - Implemented in `7cccf81`, `a817c38`.
 
 ### Fixed

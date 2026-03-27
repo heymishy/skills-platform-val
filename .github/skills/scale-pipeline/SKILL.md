@@ -76,7 +76,7 @@ Include success criteria and rollback criteria per phase.
 Use template: `.github/templates/scale-pipeline.md`
 
 Save to:
-- `.github/artefacts/[programme-slug]/scale-pipeline.md`
+- `artefacts/[programme-slug]/scale-pipeline.md`
 
 ---
 

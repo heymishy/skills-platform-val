@@ -131,7 +131,7 @@ Confirm everything before saving:
 >
 > Reply: confirm — or tell me what to adjust
 
-Save to `.github/artefacts/[feature]/spikes/[spike-slug]-brief.md` on confirmation.
+Save to `artefacts/[feature]/spikes/[spike-slug]-brief.md` on confirmation.
 
 ---
 
@@ -159,7 +159,7 @@ the outcome artefact with DEFER and an honest accounting of what remains unknown
 ## Outcome artefact
 
 Conforms to `.github/templates/spike-outcome.md`.
-Save to `.github/artefacts/[feature]/spikes/[spike-slug]-outcome.md`.
+Save to `artefacts/[feature]/spikes/[spike-slug]-outcome.md`.
 
 ---
 
@@ -236,4 +236,4 @@ Update `.github/pipeline-state.json` in the **project repository** at each phase
 - **On PROCEED:** restore the feature/story to the stage it was blocked from (e.g. `stage: "definition"`), set `health: "green"`, clear `blocker`, `updatedAt: [now]`
 - **On REDESIGN:** set `health: "amber"`, `blocker: "Spike REDESIGN — [what needs to change]"`, return stage to the pipeline step that needs rework (e.g. `stage: "definition"`), `updatedAt: [now]`
 - **On DEFER:** set `health: "red"`, `blocker: "Spike DEFER — [reason]"`, `stage: "spike"`, `updatedAt: [now]`
-- Save the spike outcome artefact to `.github/artefacts/[feature]/spikes/[spike-slug]-outcome.md`
+- Save the spike outcome artefact to `artefacts/[feature]/spikes/[spike-slug]-outcome.md`

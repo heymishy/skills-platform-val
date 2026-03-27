@@ -4,7 +4,7 @@
   USAGE: Produced by /metric-review at programme phase gates, quarterly checkpoints,
   or on demand. Saved as a supplement alongside benefit-metric.md.
   
-  Save to: .github/artefacts/[feature]/benefit-metric-review-[YYYY-MM].md
+  Save to: artefacts/[feature]/benefit-metric-review-[YYYY-MM].md
   
   To evolve: update templates/metric-review.md and open a PR.
 -->
@@ -12,7 +12,7 @@
 **Review period:** [start date] → [end date]
 **Reviewed by:** [name]
 **Date:** [YYYY-MM-DD]
-**Artefact path:** `.github/artefacts/[feature]/benefit-metric-review-[YYYY-MM].md`
+**Artefact path:** `artefacts/[feature]/benefit-metric-review-[YYYY-MM].md`
 
 ---
 

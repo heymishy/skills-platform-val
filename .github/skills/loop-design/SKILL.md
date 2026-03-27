@@ -88,8 +88,8 @@ Include cadence and ownership for each feedback path.
 Use template: `.github/templates/loop-design.md`
 
 Save to:
-- Feature scope: `.github/artefacts/[feature-slug]/loop-design.md`
-- Programme scope: `.github/artefacts/[programme-slug]/loop-design.md`
+- Feature scope: `artefacts/[feature-slug]/loop-design.md`
+- Programme scope: `artefacts/[programme-slug]/loop-design.md`
 
 ---
 

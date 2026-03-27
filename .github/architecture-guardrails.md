@@ -11,7 +11,7 @@
   - /trace skill (Architecture compliance check in chain validation)
   - Coding agent (Constraints block in DoR artefact — agent must not violate these)
 
-  Per-feature decisions live in .github/artefacts/[feature]/decisions.md
+  Per-feature decisions live in artefacts/[feature]/decisions.md
   Structural decisions that constrain future features are promoted to Active ADRs here.
 
   To evolve: update this file, open a PR, tag tech lead for review.
@@ -31,7 +31,7 @@ It contains:
 - `.github/templates/*.md` — artefact templates (Markdown)
 - `.github/pipeline-state.json` + `pipeline-state.schema.json` — live + schema state files
 - `.github/scripts/` — Node.js pre-commit hooks and validators
-- `.github/artefacts/` — per-feature pipeline artefacts produced during delivery
+- `artefacts/` — per-feature pipeline artefacts produced during delivery
 
 Architecture guardrails apply to changes to the viz (`pipeline-viz.html`), the schema (`pipeline-state.schema.json`), and any new scripts added under `.github/scripts/`.
 

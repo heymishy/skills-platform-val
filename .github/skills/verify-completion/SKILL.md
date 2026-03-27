@@ -67,7 +67,7 @@ Read the full output. Report:
 
 ## Step 2 — Walk through the AC verification script
 
-Read `.github/artefacts/[feature]/verification-scripts/[story-slug]-verification.md`.
+Read `artefacts/[feature]/verification-scripts/[story-slug]-verification.md`.
 
 For each scenario:
 

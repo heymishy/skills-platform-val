@@ -28,7 +28,7 @@ No prerequisites. First step in the pipeline.
 ## Step 0 - Check for reference materials
 
 Before asking any questions, check whether a reference folder exists for this
-feature at `.github/artefacts/[feature-slug]/reference/`.
+feature at `artefacts/[feature-slug]/reference/`.
 
 If the folder exists and contains files, list them:
 
@@ -57,7 +57,7 @@ If no reference folder exists, proceed directly to the conversational process.
 
 > **Tip for large or multi-team initiatives:** Drop scoping documents, business
 > cases, or other source materials into
-> `.github/artefacts/[feature-slug]/reference/` and create a
+> `artefacts/[feature-slug]/reference/` and create a
 > `reference-index.md` there (template at `.github/templates/reference-index.md`).
 > Discovery, /benefit-metric, and /definition will read them automatically.
 
@@ -170,7 +170,7 @@ Ask:
 ## Output artefact
 
 Conforms to `.github/templates/discovery.md`.
-Save to `.github/artefacts/[feature-slug]/discovery.md`.
+Save to `artefacts/[feature-slug]/discovery.md`.
 
 ---
 

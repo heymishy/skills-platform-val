@@ -85,8 +85,8 @@ Recommend concrete controls in repo config:
 Use template: `.github/templates/token-optimization.md`
 
 Save to:
-- `.github/artefacts/[feature-slug]/token-optimization.md`
-- Or org-level: `.github/artefacts/[programme-slug]/token-optimization.md`
+- `artefacts/[feature-slug]/token-optimization.md`
+- Or org-level: `artefacts/[programme-slug]/token-optimization.md`
 
 ---
 

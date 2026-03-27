@@ -107,7 +107,7 @@ Ask this before presenting any pipeline guidance:
 > questions in detail during setup and record the qualifying signals.
 >
 > Check for an existing programme artefact at
-> `.github/artefacts/[programme-slug]/programme.md`.
+> `artefacts/[programme-slug]/programme.md`.
 >
 > - Found: run /programme → health view
 > - Not found: run /programme → setup (Step 0 qualification → workstream registration)
@@ -236,7 +236,7 @@ Check the most recent review report for unresolved HIGH findings.
 
 ### 2. Open spike with no outcome
 
-Check `.github/artefacts/[feature]/spikes/` for briefs without outcome files.
+Check `artefacts/[feature]/spikes/` for briefs without outcome files.
 
 > 🔴 **BLOCKED — spike in progress**
 > Spike: [title]
@@ -377,7 +377,7 @@ For each feature in `pipeline-state.json`:
    - If `updatedAt` is more than 7 days ago → set `health: "red"`, note "Stalled [n] days — needs attention"
 
 3. **Scan for features not yet in state (active scan — do not skip):**
-   - List ALL subdirectories of `.github/artefacts/` in the project repository — each is a potential feature slug
+   - List ALL subdirectories of `artefacts/` in the project repository — each is a potential feature slug
    - Skip `.gitkeep` and any non-directory entries
    - For each subdirectory slug, check if a matching `slug` entry exists in `features[]`
    - If NO entry exists:

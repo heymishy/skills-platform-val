@@ -4,7 +4,7 @@
   USAGE: Produced inline by /verify-completion during a session.
   Records test run results and AC-by-AC verification walk-through.
   
-  The AC verification script (.github/artefacts/[feature]/verification-scripts/
+  The AC verification script (artefacts/[feature]/verification-scripts/
   [story-slug]-verification.md) contains the plain-language scenarios to walk through.
   
   This artefact is produced in-session — not typically saved as a separate file

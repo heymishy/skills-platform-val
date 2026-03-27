@@ -4,7 +4,7 @@
   PURPOSE: Catalogue of source documents uploaded to this feature's reference folder.
   
   Place this file at:
-  .github/artefacts/[feature-slug]/reference/reference-index.md
+  artefacts/[feature-slug]/reference/reference-index.md
   
   The /discovery, /benefit-metric, and /definition skills check for this file.
   When found, they use it to locate and read source materials automatically,

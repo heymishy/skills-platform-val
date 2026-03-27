@@ -23,7 +23,7 @@ triggers:
 
 Before asking anything, verify:
 
-1. At least one story artefact exists in `.github/artefacts/[feature]/stories/`
+1. At least one story artefact exists in `artefacts/[feature]/stories/`
 2. Parent epic artefact exists
 3. Benefit-metric artefact exists (for metric linkage validation)
 4. Discovery artefact exists (for scope validation)
@@ -160,7 +160,7 @@ LOW: pattern library or style guide component preferred but not specified in Arc
 ## Full report output format
 
 Conforms to `.github/templates/review-report.md`.
-Save to `.github/artefacts/[feature]/review/[story-slug]-review-[N].md`.
+Save to `artefacts/[feature]/review/[story-slug]-review-[N].md`.
 
 Finding IDs: `[Run]-[Severity]-[Sequence]` e.g. `1-H1`, `1-M1`, `2-L1`
 

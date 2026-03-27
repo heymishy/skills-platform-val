@@ -24,7 +24,7 @@ triggers:
 
 Before asking anything, verify:
 
-1. Benefit-metric artefact exists at `.github/artefacts/[feature]/benefit-metric.md`
+1. Benefit-metric artefact exists at `artefacts/[feature]/benefit-metric.md`
 2. At least one story has reached DoD-complete state (otherwise there's nothing to measure)
 
 If not met:
@@ -131,7 +131,7 @@ writing it to the artefact.
 ## Output
 
 Conforms to `.github/templates/metric-review.md`.
-Save to `.github/artefacts/[feature]/benefit-metric-review-[YYYY-MM].md`.
+Save to `artefacts/[feature]/benefit-metric-review-[YYYY-MM].md`.
 
 ---
 

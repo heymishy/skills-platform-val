@@ -4,7 +4,7 @@
   USAGE: Produced by the /programme skill when a programme is registered.
   Updated by /programme at phase gate reviews and on-demand health checks.
   
-  Save to: .github/artefacts/[programme-slug]/programme.md
+  Save to: artefacts/[programme-slug]/programme.md
   
   To evolve: update templates/programme.md and open a PR.
 -->
@@ -13,7 +13,7 @@
 **Status:** Active / On hold / Complete
 **Overall timeline:** [start] → [end]
 **Phase gates:** [list phases with target dates and current status]
-**Artefact path:** `.github/artefacts/[programme-slug]/programme.md`
+**Artefact path:** `artefacts/[programme-slug]/programme.md`
 
 ---
 

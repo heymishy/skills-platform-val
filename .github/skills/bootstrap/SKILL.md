@@ -313,7 +313,7 @@ Before the first delivery cycle:
 Reference:
   Pipeline overview:  .github/copilot-instructions.md
   Template formats:   .github/templates/
-  Example artefacts:  .github/artefacts/ (empty until first /discovery run)
+  Example artefacts:  artefacts/ (empty until first /discovery run)
 ```
 
 ---

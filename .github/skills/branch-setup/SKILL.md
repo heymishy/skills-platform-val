@@ -19,7 +19,7 @@ triggers:
 ## Entry condition
 
 DoR artefact with `Proceed: Yes` must exist at:
-`.github/artefacts/[feature]/dor/[story-slug]-dor.md`
+`artefacts/[feature]/dor/[story-slug]-dor.md`
 
 If not:
 

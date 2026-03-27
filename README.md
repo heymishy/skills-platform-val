@@ -181,7 +181,7 @@ flowchart TD
 
 Each skill is a `SKILL.md` file with YAML frontmatter that Copilot uses for automatic invocation. You say a natural phrase — "I have an idea", "review the stories", "is this story ready" — and the right skill activates. Each skill asks clarifying questions, produces a structured artefact, and tells you exactly what to do next.
 
-All artefacts are saved to `.github/artefacts/[feature-slug]/` so nothing lives only in a chat window.
+All artefacts are saved to `artefacts/[feature-slug]/` so nothing lives only in a chat window.
 
 ---
 
@@ -426,7 +426,7 @@ All structured artefacts conform to templates in `.github/templates/`. Skills re
 ## Artefact storage
 
 ```
-.github/artefacts/[feature-slug]/
+artefacts/[feature-slug]/
   reference/                        ← source documents (scoping decks, business cases, OKRs)
     reference-index.md
   discovery.md
@@ -449,7 +449,7 @@ All structured artefacts conform to templates in `.github/templates/`. Skills re
 
 For programme-track work, the programme artefact and consumer registry live at:
 ```
-.github/artefacts/[programme-slug]/
+artefacts/[programme-slug]/
   programme.md
   consumer-registry.md             ← library/service rewrite programmes only
 ```
@@ -508,10 +508,10 @@ Activate a profile by copying it to `.github/context.yml`:
 
 ```bash
 # Personal / open-source
-cp .github/contexts/personal.yml .github/context.yml
+cp contexts/personal.yml .github/context.yml
 
 # Enterprise / regulated
-cp .github/contexts/work.yml .github/context.yml
+cp contexts/work.yml .github/context.yml
 ```
 
 Then edit the fields in `context.yml` to match your actual repo before committing.

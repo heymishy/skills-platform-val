@@ -80,13 +80,13 @@ Currently the pipeline runs idea → done, with no feedback loop. Knowledge gain
 **Analogues:** Agent OS `agent-os/specs/{timestamp-slug}/`, spec-kit per-feature spec folders
 
 #### What it is
-A naming convention enforced by `/bootstrap` and the pipeline skills: every feature generates artefacts into a timestamped folder under `.github/artefacts/`, e.g. `.github/artefacts/2026-03-23-payment-retry-logic/`. The folder contains all artefacts for that feature: discovery, benefit-metric, epic, stories, test-plan, trace, and the DoD report.
+A naming convention enforced by `/bootstrap` and the pipeline skills: every feature generates artefacts into a timestamped folder under `artefacts/`, e.g. `artefacts/2026-03-23-payment-retry-logic/`. The folder contains all artefacts for that feature: discovery, benefit-metric, epic, stories, test-plan, trace, and the DoD report.
 
 #### Why it matters
-Currently `.github/artefacts/` is a flat `.gitkeep`. As the pipeline is used across multiple features in parallel and over time, artefacts have no home, no history, and no relationship to each other. Timestamped folders give `/trace` a natural output home, give `/reverse-engineer` a structured history to query, and mean the repo tells its own story over time — anyone can look at `artefacts/` and understand what was built, when, and why. This is also the foundation for Feature 9 (outer-loop CI traceability), which needs to know where to find artefacts for a given PR branch.
+Currently `artefacts/` is a flat `.gitkeep`. As the pipeline is used across multiple features in parallel and over time, artefacts have no home, no history, and no relationship to each other. Timestamped folders give `/trace` a natural output home, give `/reverse-engineer` a structured history to query, and mean the repo tells its own story over time — anyone can look at `artefacts/` and understand what was built, when, and why. This is also the foundation for Feature 9 (outer-loop CI traceability), which needs to know where to find artefacts for a given PR branch.
 
 #### Implementation considerations
-- Convention: `YYYY-MM-DD-{feature-slug}/` under `.github/artefacts/`
+- Convention: `YYYY-MM-DD-{feature-slug}/` under `artefacts/`
 - Feature slug: kebab-case, derived from the discovery artefact title, max 40 chars
 - Contents per folder:
   ```
@@ -311,7 +311,7 @@ Your `/trace` skill is powerful but manually invoked. In a team of 220 engineers
 #### Implementation considerations
 - Create `.github/workflows/trace-validation.yml`
 - Validation checks (fail PR if):
-  - PR description does not reference a story file in `.github/artefacts/`
+  - PR description does not reference a story file in `artefacts/`
   - Referenced story file does not have a linked discovery artefact
   - Story AC count does not match test-plan AC count (within tolerance — exact match not required, but gross mismatches flagged)
   - Benefit-metric file exists but has no Tier 1 metric defined

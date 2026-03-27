@@ -18,7 +18,7 @@ triggers:
 
 ## Entry condition
 
-1. Implementation plan at `.github/artefacts/[feature]/plans/[story-slug]-plan.md`
+1. Implementation plan at `artefacts/[feature]/plans/[story-slug]-plan.md`
 2. Worktree exists and baseline is clean (run /branch-setup if not)
 
 If not met:
@@ -57,7 +57,7 @@ Read `.github/context.yml` at start of execution.
 
 ## Step 1 â€” Read the plan once
 
-Read `.github/artefacts/[feature]/plans/[story-slug]-plan.md` fully.
+Read `artefacts/[feature]/plans/[story-slug]-plan.md` fully.
 
 Extract all tasks:
 - Task number and title

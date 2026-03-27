@@ -4,14 +4,14 @@
   USAGE: Produced by the /spike skill when a scoped investigation concludes.
   Outcome must be PROCEED, REDESIGN, or DEFER — not "it depends".
   
-  Save to: .github/artefacts/[feature]/spikes/[spike-slug]-outcome.md
+  Save to: artefacts/[feature]/spikes/[spike-slug]-outcome.md
   
   To evolve: update templates/spike-outcome.md and open a PR.
 -->
 
 **Opened:** [YYYY-MM-DD] | **Scope:** [narrow / standard / thorough] | **Steps taken:** [n]
 **Done condition met:** Yes / Partially / No — [explain if not fully met]
-**Artefact path:** `.github/artefacts/[feature]/spikes/[spike-slug]-outcome.md`
+**Artefact path:** `artefacts/[feature]/spikes/[spike-slug]-outcome.md`
 
 ---
 
@@ -61,4 +61,4 @@ If nothing material is unknown at close, state: "Nothing material unknown at tim
 ## Decision log reference
 
 [Link to /decisions entry recording this spike's outcome]
-[Artefact: `.github/artefacts/[feature]/decisions.md`]
+[Artefact: `artefacts/[feature]/decisions.md`]

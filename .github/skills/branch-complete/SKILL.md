@@ -114,16 +114,16 @@ gh pr create \
   --draft \
   --body "$(cat <<'EOF'
 ## Story
-[Path: .github/artefacts/[feature]/stories/[story-slug].md]
+[Path: artefacts/[feature]/stories/[story-slug].md]
 
 ## ACs satisfied
 [List each AC from the story with ✅]
 
 ## Test plan
-[Path: .github/artefacts/[feature]/test-plans/[story-slug]-test-plan.md]
+[Path: artefacts/[feature]/test-plans/[story-slug]-test-plan.md]
 
 ## DoR
-[Path: .github/artefacts/[feature]/dor/[story-slug]-dor.md]
+[Path: artefacts/[feature]/dor/[story-slug]-dor.md]
 
 ## Notes
 [Any ambiguities encountered during implementation - if none, write "None"]
