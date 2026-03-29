@@ -257,3 +257,15 @@ Add to the log entry format:
 - Does not replace story or epic artefacts
 - Does not create Jira tickets or Confluence pages
 - Does not generate ADR content from inference - substance must come from the human
+
+---
+
+## State update — mandatory final step
+
+> **Mandatory.** Do not close this skill without completing this write. Confirm the write in your closing message: "Pipeline state updated ✅."
+
+Update `.github/pipeline-state.json` for the relevant feature after each decision is recorded:
+
+- Set `updatedAt: [now]`
+- If a `RISK-ACCEPT` was recorded: add a `riskAcceptances` entry with `id`, `decision`, and `date`
+- Do not change `stage` — /decisions does not advance the pipeline stage

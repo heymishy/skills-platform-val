@@ -409,3 +409,15 @@ Sourced only from PARITY REQUIRED rules rated [VERIFIED] or [PROBABLE].
 - Does not guarantee extraction completeness -- states explicitly what was and was not read
 - Does not contact the vendor -- produces the Q&A tracker for your team to send
 
+---
+
+## State update — mandatory final step
+
+> **Mandatory.** Do not close this skill without completing this write. Confirm the write in your closing message: "Pipeline state updated ✅."
+
+Update `.github/pipeline-state.json` for the relevant feature after the report is produced:
+
+- Set `reverseEngineerStatus: "complete"`, `updatedAt: [now]`
+- If vendor Q&A tracker was produced: set `vendorQATrackerCreated: true`
+- If any FAIL gaps were found: set `health: "amber"` and list the first gap in `blocker`
+

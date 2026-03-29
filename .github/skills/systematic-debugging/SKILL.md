@@ -247,3 +247,13 @@ If you catch yourself thinking:
 **Phase 4 uses:** /tdd (create failing test first)
 **After fixing:** run /verify-completion before claiming the bug is resolved
 **Architectural findings:** log in /decisions
+
+---
+
+## State update — mandatory final step
+
+This skill does not advance the pipeline stage. It supports debugging within the inner loop and does not write to `pipeline-state.json` directly.
+
+After the bug is resolved:
+- Run `/verify-completion` — that skill handles the state write
+- If an architectural finding was logged in `/decisions`, that skill handles its own write
