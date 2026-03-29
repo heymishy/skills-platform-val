@@ -463,8 +463,13 @@
   #md-status { font-size: 10px; color: var(--muted); margin-right: 6px; }
   #md-content { display: none; }
   #md-content.active { display: block; }
-  #md-editor { display: none; width: 100%; min-height: 58vh; resize: vertical; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: monospace; font-size: 12px; line-height: 1.55; box-sizing: border-box; }
+  #md-editor { display: none; width: 100%; min-height: 58vh; resize: vertical; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: monospace; font-size: 12px; line-height: 1.55; box-sizing: border-box; border-top-left-radius: 0; border-top-right-radius: 0; }
   #md-editor.active { display: block; }
+  #md-format-bar { display: none; gap: 2px; padding: 5px 8px; background: var(--surface); border: 1px solid var(--border); border-bottom: none; border-radius: 6px 6px 0 0; flex-wrap: wrap; }
+  #md-format-bar.active { display: flex; }
+  .fmt-btn { background: none; border: 1px solid transparent; color: var(--muted); border-radius: 4px; padding: 2px 7px; cursor: pointer; font-size: 11px; line-height: 1.6; }
+  .fmt-btn:hover { background: rgba(255,255,255,.07); color: var(--text); border-color: var(--border); }
+  .fmt-sep { width: 1px; background: var(--border); margin: 2px 4px; }
   #md-body { overflow-y: auto; padding: 24px 32px; flex: 1; line-height: 1.6; }
   .md-content { max-width: 720px; }
   .md-content h1 { font-size: 20px; font-weight: 700; margin: 0 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
@@ -870,6 +875,24 @@
   <div id="md-conflict"></div>
   <div id="md-body">
     <div class="md-content active" id="md-content"></div>
+    <div id="md-format-bar">
+      <button class="fmt-btn" data-fmt="bold"      title="Bold (Ctrl+B)"><strong>B</strong></button>
+      <button class="fmt-btn" data-fmt="italic"    title="Italic (Ctrl+I)"><em>I</em></button>
+      <button class="fmt-btn" data-fmt="strike"    title="Strikethrough"><s>S</s></button>
+      <div class="fmt-sep"></div>
+      <button class="fmt-btn" data-fmt="h2"        title="Heading 2">H2</button>
+      <button class="fmt-btn" data-fmt="h3"        title="Heading 3">H3</button>
+      <div class="fmt-sep"></div>
+      <button class="fmt-btn" data-fmt="ul"        title="Bullet list">• List</button>
+      <button class="fmt-btn" data-fmt="ol"        title="Numbered list">1. List</button>
+      <button class="fmt-btn" data-fmt="checkbox"  title="Checkbox">[ ] Check</button>
+      <div class="fmt-sep"></div>
+      <button class="fmt-btn" data-fmt="code"      title="Inline code"><code>`code`</code></button>
+      <button class="fmt-btn" data-fmt="codeblock" title="Code block"><code>```block```</code></button>
+      <div class="fmt-sep"></div>
+      <button class="fmt-btn" data-fmt="link"      title="Link">🔗 Link</button>
+      <button class="fmt-btn" data-fmt="hr"        title="Horizontal rule">— Rule</button>
+    </div>
     <textarea id="md-editor" spellcheck="false"></textarea>
     <div id="md-form"></div>
     <div id="md-diff"></div>
@@ -2667,6 +2690,8 @@ function renderMdBody() {
   if (formEl) formEl.classList.toggle('active',  mdMode === 'form');
   if (diffEl) diffEl.classList.toggle('active',  mdMode === 'diff');
   if (copyBtn) copyBtn.style.display = mdMode === 'diff' ? '' : 'none';
+  const fmtBar = document.getElementById('md-format-bar');
+  if (fmtBar) fmtBar.classList.toggle('active', mdMode === 'raw');
   editorEl.value = mdDraftText;
   const html = typeof marked !== 'undefined'
     ? marked.parse(mdDraftText || '')
@@ -2920,6 +2945,49 @@ function initFilters() {
   document.getElementById('drawer-overlay').addEventListener('click', closeDrawer);
   document.getElementById('md-close').addEventListener('click', closeMdViewer);
   document.getElementById('md-overlay').addEventListener('click', closeMdViewer);
+
+  // ── Format toolbar ────────────────────────────────────────────────────────
+  function applyFormat(fmt) {
+    const ta = document.getElementById('md-editor');
+    const start = ta.selectionStart, end = ta.selectionEnd;
+    const sel = ta.value.substring(start, end);
+    const before = ta.value.substring(0, start);
+    const after  = ta.value.substring(end);
+    let insert = '', newCursor = null;
+    const lineStart = before.lastIndexOf('\n') + 1;
+    const linePrefix = ta.value.substring(lineStart, start);
+    switch (fmt) {
+      case 'bold':      insert = `**${sel||'bold text'}**`;      newCursor = sel ? null : start + 2; break;
+      case 'italic':    insert = `*${sel||'italic text'}*`;      newCursor = sel ? null : start + 1; break;
+      case 'strike':    insert = `~~${sel||'text'}~~`;           newCursor = sel ? null : start + 2; break;
+      case 'h2':        insert = `\n## ${sel||'Heading'}\n`;     break;
+      case 'h3':        insert = `\n### ${sel||'Heading'}\n`;    break;
+      case 'ul':        insert = `\n- ${sel||'item'}\n`;         break;
+      case 'ol':        insert = `\n1. ${sel||'item'}\n`;        break;
+      case 'checkbox':  insert = `\n- [ ] ${sel||'task'}\n`;     break;
+      case 'code':      insert = `\`${sel||'code'}\``;           newCursor = sel ? null : start + 1; break;
+      case 'codeblock': insert = `\n\`\`\`\n${sel||'code'}\n\`\`\`\n`; break;
+      case 'link':      insert = `[${sel||'label'}](url)`;       break;
+      case 'hr':        insert = `\n---\n`;                      break;
+      default: return;
+    }
+    ta.value = before + insert + after;
+    mdDraftText = ta.value;
+    ta.selectionStart = ta.selectionEnd = sel ? start + insert.length : (newCursor ?? start + insert.length);
+    ta.focus();
+    renderMdStatus();
+    renderValidation();
+  }
+  document.getElementById('md-format-bar').addEventListener('click', e => {
+    const btn = e.target.closest('[data-fmt]');
+    if (btn) applyFormat(btn.dataset.fmt);
+  });
+
+  // Ctrl+B / Ctrl+I shortcuts in editor
+  document.getElementById('md-editor').addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'b') { e.preventDefault(); applyFormat('bold'); }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'i') { e.preventDefault(); applyFormat('italic'); }
+  });
   document.getElementById('md-tab-preview').addEventListener('click', () => {
     mdMode = 'preview';
     renderMdBody();
