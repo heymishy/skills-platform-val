@@ -73,6 +73,7 @@ Skill files and templates are content, not code — they are governed by pipelin
 | Governance gate evaluation | `.github/pipeline-viz.html` — `evaluateGate()` | Pattern for reading state fields and producing pass/warn/fail |
 | JSON schema definition | `.github/pipeline-state.schema.json` | All new state fields must be added here before being used |
 | Pre-commit validation | `.github/scripts/check-viz-syntax.js` | Pattern for adding new validators |
+| Skill structural contracts | `.github/scripts/check-skill-contracts.js` | Defines required markers per skill; extend when adding structural invariants |
 
 ---
 
