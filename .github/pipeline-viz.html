@@ -855,7 +855,7 @@
     <span id="md-title"></span>
     <span id="md-status"></span>
     <button class="md-tab-btn active" id="md-tab-preview">Preview</button>
-    <button class="md-tab-btn" id="md-tab-raw">Markdown</button>
+    <button class="md-tab-btn" id="md-tab-raw">✏️ Edit</button>
     <button class="md-tab-btn" id="md-tab-form" style="display:none">Form</button>
     <button class="md-tab-btn" id="md-tab-diff" style="display:none">Diff</button>
     <button id="md-copy-patch" style="display:none">Copy patch</button>
@@ -2671,7 +2671,7 @@ function renderMdBody() {
   const html = typeof marked !== 'undefined'
     ? marked.parse(mdDraftText || '')
     : `<pre style="white-space:pre-wrap;font-size:12px;line-height:1.6">${esc(mdDraftText || '')}</pre>`;
-  contentEl.innerHTML = html;
+  contentEl.innerHTML = html + `<div style="margin-top:24px;padding-top:10px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)">Click <strong style="color:var(--text)">\u270f\ufe0f Edit</strong> above to edit \u00b7 <strong style="color:var(--text)">Save draft</strong> saves locally \u00b7 <strong style="color:var(--text)">\ud83d\udce6 VS Code</strong> opens in editor to save to disk</div>`;
   if (mdMode === 'form') renderFormBody();
   if (mdMode === 'diff') renderDiffBody();
   renderValidation();
