@@ -199,6 +199,18 @@ if (-not $DryRun) {
 
 # standards scaffold
 Copy-SkillFile '.github/standards/index.yml' (Join-Path $Target '.github/standards/index.yml')
+foreach ($domain in @('api','auth','data','security','payments','ui')) {
+    $files = @{
+        'api'      = 'api-design.md'
+        'auth'     = 'auth-patterns.md'
+        'data'     = 'data-standards.md'
+        'security' = 'security-standards.md'
+        'payments' = 'payments-standards.md'
+        'ui'       = 'ui-standards.md'
+    }
+    $rel = ".github/standards/$domain/$($files[$domain])"
+    Copy-SkillFile $rel (Join-Path $Target $rel)
+}
 
 # product context scaffold
 foreach ($f in @('mission.md','roadmap.md','tech-stack.md','constraints.md')) {
@@ -223,35 +235,69 @@ if ((Test-Path $ContextYml) -and (Select-String -Path $ContextYml -Pattern '\bci
     Write-Warn "See .github/skills/trace/SKILL.md CI usage section for your platform's integration snippet."
 }
 
-# ── Placeholder prompts ──────────────────────────────────────────────────────
+# ── Setup prompts ─────────────────────────────────────────────────────────────
 if (-not $DryRun) {
     Write-Host ""
     Write-Host "========================================================" -ForegroundColor DarkGray
-    Write-Host "  Two quick questions - these go into copilot-instructions.md"
-    Write-Host "  and are loaded into every Copilot interaction in this repo."
-    Write-Host "  They tell the agent what you are building and how you build it."
+    Write-Host "  Quick setup — answers go into copilot-instructions.md"
+    Write-Host "  and context.yml, loaded into every agent interaction."
+    Write-Host "========================================================" -ForegroundColor DarkGray
     Write-Host ""
-    Write-Host "  Product context - Copilot uses this to frame all decisions:"
-    Write-Host "  what problem does this repo solve, for whom, and why."
-    Write-Host "  Example: 'A prioritisation canvas tool for workshop facilitators."
-    Write-Host "           Teams plot ideas on a 2x2 grid and export results.'"    Write-Host "  (You can update this any time in .github/copilot-instructions.md)"
-    $productCtx = Read-Host "  > Your product context (one or two sentences)"
-    Write-Host ""
-    Write-Host "  Coding standards - Copilot uses this to match your stack when"
-    Write-Host "  generating code: language, framework, test tool, lint rules."
-    Write-Host "  Example: 'TypeScript, React, Vitest, ESLint Airbnb'"
-    Write-Host "  (You can update this any time in .github/copilot-instructions.md)"
-    $codingStandards = Read-Host "  > Your language + framework + test tool"
 
+    # 1 — Product context
+    Write-Host "  1/4  Product context"
+    Write-Host "       What does this repo build, for whom, and why?"
+    Write-Host "       Example: 'A payments gateway for internal systems."
+    Write-Host "                Handles card authorisation and settlement.'"
+    $productCtx = Read-Host "       > One or two sentences"
+    Write-Host ""
+
+    # 2 — Coding standards
+    Write-Host "  2/4  Coding standards"
+    Write-Host "       Language, framework, test tool, lint rules."
+    Write-Host "       Example: TypeScript, React, Vitest, ESLint Airbnb"
+    $codingStandards = Read-Host "       > Language + framework + test tool"
+    Write-Host ""
+
+    # 3 — Agent runtime
+    Write-Host "  3/4  Agent runtime — which AI agent runs in this repo?"
+    Write-Host "       1. GitHub Copilot   (copilot-instructions.md)"
+    Write-Host "       2. Claude Code       (AGENTS.md)"
+    Write-Host "       3. Cursor            (.cursorrules)"
+    Write-Host "       4. Other"
+    $agentChoice = Read-Host "       > Reply 1, 2, 3, or 4"
+    $instrFileName = switch ($agentChoice.Trim()) {
+        '2'     { 'AGENTS.md' }
+        '3'     { '.cursorrules' }
+        '4'     { Read-Host "       > Instruction filename" }
+        default { 'copilot-instructions.md' }
+    }
+    Write-Host ""
+
+    # 4 — EA registry
+    Write-Host "  4/4  EA registry — org-level application / interface registry?"
+    Write-Host "       1. No"
+    Write-Host "       2. Yes — https://github.com/heymishy/ea-registry (default)"
+    Write-Host "       3. Yes — I'll provide my own URL"
+    $eaChoice = Read-Host "       > Reply 1, 2, or 3"
+    $eaRepo = switch ($eaChoice.Trim()) {
+        '2'     { 'https://github.com/heymishy/ea-registry' }
+        '3'     { Read-Host "       > EA registry URL" }
+        default { '' }
+    }
+    $eaAuth = if ($eaChoice.Trim() -in '2','3') { 'true' } else { 'false' }
+    Write-Host ""
+
+    # ── Patch copilot-instructions.md placeholders ──────────────────────────
     $instrFile = Join-Path $Target '.github/copilot-instructions.md'
     if (Test-Path $instrFile) {
         $content = Get-Content $instrFile -Raw
         $count = 0
-        $replacements = @($productCtx, $codingStandards)
+        $fillValues = @($productCtx, $codingStandards)
         $result = [regex]::Replace($content, '\[FILL IN BEFORE COMMITTING\]', {
             param($m)
-            if ($count -lt $replacements.Count) {
-                $val = $replacements[$count]
+            if ($count -lt $fillValues.Count) {
+                $val = $fillValues[$count]
                 $count++
                 return $val
             }
@@ -261,16 +307,32 @@ if (-not $DryRun) {
         Write-OK "Placeholders substituted in copilot-instructions.md"
     }
 
+    # ── Patch context.yml: agent.instruction_file + ea_registry ─────────────
+    $ContextYml = Join-Path $Target '.github/context.yml'
+    if (Test-Path $ContextYml) {
+        $cy = Get-Content $ContextYml -Raw
+        $cy = $cy -replace '(?m)^(  instruction_file:\s*).*$', "  instruction_file: `"$instrFileName`""
+        if ($eaRepo) {
+            $cy = $cy -replace '(?m)^(  ea_registry_repo:\s*).*$',          "  ea_registry_repo: `"$eaRepo`""
+            $cy = $cy -replace '(?m)^(  ea_registry_authoritative:\s*).*$', "  ea_registry_authoritative: $eaAuth"
+        } else {
+            $cy = $cy -replace '(?m)^(  ea_registry_repo:\s*).*$',          '  ea_registry_repo: null'
+            $cy = $cy -replace '(?m)^(  ea_registry_authoritative:\s*).*$', '  ea_registry_authoritative: false'
+        }
+        Set-Content $ContextYml $cy -NoNewline
+        Write-OK "context.yml updated (agent runtime: $instrFileName, EA registry: $(if ($eaRepo) { $eaRepo } else { 'none' }))"
+    }
+
     Write-Host ""
     Write-Host "========================================================" -ForegroundColor DarkGray
     Write-Host ""
     Write-OK "Install complete."
     Write-Host ""
     Write-Host "  Next steps:"
-    Write-Host "    1. Review .github\product\ and fill in your product context"
-    Write-Host "    2. Review .github\standards\ and add your coding standards"
-    Write-Host "    3. Open pipeline-viz.html in VS Code Live Preview"
-    Write-Host "    4. Run /workflow in GitHub Copilot to start your first feature"
+    Write-Host "    1. Fill in .github/product/ (mission, roadmap, tech-stack, constraints)"
+    Write-Host "    2. Fill in .github/standards/ domain stubs with your rules"
+    Write-Host "    3. Open pipeline-viz.html in browser (Live Server or file://)"
+    Write-Host "    4. Run /workflow to start your first feature"
     Write-Host ""
 }
 

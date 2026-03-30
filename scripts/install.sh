@@ -197,6 +197,12 @@ fi
 
 # standards scaffold
 copy_file ".github/standards/index.yml" "$TARGET_DIR/.github/standards/index.yml"
+copy_file ".github/standards/api/api-design.md"             "$TARGET_DIR/.github/standards/api/api-design.md"
+copy_file ".github/standards/auth/auth-patterns.md"         "$TARGET_DIR/.github/standards/auth/auth-patterns.md"
+copy_file ".github/standards/data/data-standards.md"        "$TARGET_DIR/.github/standards/data/data-standards.md"
+copy_file ".github/standards/security/security-standards.md" "$TARGET_DIR/.github/standards/security/security-standards.md"
+copy_file ".github/standards/payments/payments-standards.md" "$TARGET_DIR/.github/standards/payments/payments-standards.md"
+copy_file ".github/standards/ui/ui-standards.md"            "$TARGET_DIR/.github/standards/ui/ui-standards.md"
 
 # product context scaffold
 copy_file ".github/product/mission.md"    "$TARGET_DIR/.github/product/mission.md"
@@ -221,56 +227,92 @@ elif [[ "$DRY_RUN" == false ]]; then
   warn "See .github/skills/trace/SKILL.md CI usage section for your platform's integration snippet."
 fi
 
-# ── Placeholder prompts ───────────────────────────────────────────────────────
+# ── Setup prompts ─────────────────────────────────────────────────────────────
 if [[ "$DRY_RUN" == false ]]; then
   echo ""
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo "  Two quick questions - these go into copilot-instructions.md"
-  echo "  and are loaded into every Copilot interaction in this repo."
-  echo "  They tell the agent what you are building and how you build it."
+  echo "  Quick setup — answers go into copilot-instructions.md and context.yml"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   echo ""
-  echo "  Product context - Copilot uses this to frame all decisions:"
-  echo "  what problem does this repo solve, for whom, and why."
-  echo "  Example: 'A prioritisation canvas for workshop facilitators."
-  echo "           Teams plot ideas on a 2x2 grid and export results.'"
-  echo "  (You can update this any time in .github/copilot-instructions.md)"
-  read -r -p "  > Your product context (one or two sentences): " PRODUCT_CONTEXT
-  echo ""
-  echo "  Coding standards - Copilot uses this to match your stack when"
-  echo "  generating code: language, framework, test tool, lint rules."
-  echo "  Example: TypeScript, React, Vitest, ESLint Airbnb"
-  echo "  (You can update this any time in .github/copilot-instructions.md)"
-  read -r -p "  > Your language + framework + test tool: " CODING_STANDARDS
 
-  # Substitute into copilot-instructions.md
+  # 1 — Product context
+  echo "  1/4  Product context"
+  echo "       What does this repo build, for whom, and why?"
+  echo "       Example: 'A payments gateway for internal systems."
+  echo "                Handles card authorisation and settlement.'"
+  read -r -p "       > One or two sentences: " PRODUCT_CONTEXT
+  echo ""
+
+  # 2 — Coding standards
+  echo "  2/4  Coding standards"
+  echo "       Language, framework, test tool, lint rules."
+  echo "       Example: TypeScript, React, Vitest, ESLint Airbnb"
+  read -r -p "       > Language + framework + test tool: " CODING_STANDARDS
+  echo ""
+
+  # 3 — Agent runtime
+  echo "  3/4  Agent runtime — which AI agent runs in this repo?"
+  echo "       1. GitHub Copilot   (copilot-instructions.md)"
+  echo "       2. Claude Code       (AGENTS.md)"
+  echo "       3. Cursor            (.cursorrules)"
+  echo "       4. Other"
+  read -r -p "       > Reply 1, 2, 3, or 4: " AGENT_CHOICE
+  case "$AGENT_CHOICE" in
+    2) INSTR_FILENAME="AGENTS.md" ;;
+    3) INSTR_FILENAME=".cursorrules" ;;
+    4) read -r -p "       > Instruction filename: " INSTR_FILENAME ;;
+    *) INSTR_FILENAME="copilot-instructions.md" ;;
+  esac
+  echo ""
+
+  # 4 — EA registry
+  echo "  4/4  EA registry — org-level application / interface registry?"
+  echo "       1. No"
+  echo "       2. Yes — https://github.com/heymishy/ea-registry (default)"
+  echo "       3. Yes — I'll provide my own URL"
+  read -r -p "       > Reply 1, 2, or 3: " EA_CHOICE
+  case "$EA_CHOICE" in
+    2) EA_REPO="https://github.com/heymishy/ea-registry"; EA_AUTH="true" ;;
+    3) read -r -p "       > EA registry URL: " EA_REPO; EA_AUTH="true" ;;
+    *) EA_REPO=""; EA_AUTH="false" ;;
+  esac
+  echo ""
+
+  # ── Patch copilot-instructions.md placeholders ───────────────────────────
   INSTR_FILE="$TARGET_DIR/.github/copilot-instructions.md"
   if [[ -f "$INSTR_FILE" ]]; then
-    # Replace the first [FILL IN BEFORE COMMITTING] with product context
-    # and the second with coding standards (using awk for reliable multi-line replace)
-    python3 - <<PYEOF
-import re, sys
-
-with open('$INSTR_FILE', 'r') as f:
+    python3 - "$INSTR_FILE" "$PRODUCT_CONTEXT" "$CODING_STANDARDS" <<'PYEOF'
+import sys, re
+path, prod, code = sys.argv[1], sys.argv[2], sys.argv[3]
+with open(path, 'r') as f:
     content = f.read()
-
-replacements = [
-    ('$PRODUCT_CONTEXT', '$CODING_STANDARDS')
-]
-
 count = 0
-def replace_nth(m):
+values = [prod, code]
+def repl(m):
     global count
-    count += 1
-    return replacements[0][count - 1] if count <= len(replacements[0]) else m.group(0)
-
-# Replace first two occurrences of the placeholder
-result = re.sub(r'\[FILL IN BEFORE COMMITTING\]', replace_nth, content, count=2)
-
-with open('$INSTR_FILE', 'w') as f:
-    f.write(result)
-
-print("  Placeholders substituted in copilot-instructions.md")
+    if count < len(values):
+        v = values[count]; count += 1; return v
+    return m.group(0)
+content = re.sub(r'\[FILL IN BEFORE COMMITTING\]', repl, content)
+with open(path, 'w') as f:
+    f.write(content)
 PYEOF
+    success "Placeholders substituted in copilot-instructions.md"
+  fi
+
+  # ── Patch context.yml: agent.instruction_file + ea_registry ──────────────
+  CONTEXT_YML="$TARGET_DIR/.github/context.yml"
+  if [[ -f "$CONTEXT_YML" ]]; then
+    sed -i.bak "s|^  instruction_file:.*|  instruction_file: \"$INSTR_FILENAME\"|" "$CONTEXT_YML"
+    if [[ -n "$EA_REPO" ]]; then
+      sed -i.bak "s|^  ea_registry_repo:.*|  ea_registry_repo: \"$EA_REPO\"|" "$CONTEXT_YML"
+      sed -i.bak "s|^  ea_registry_authoritative:.*|  ea_registry_authoritative: $EA_AUTH|" "$CONTEXT_YML"
+    else
+      sed -i.bak "s|^  ea_registry_repo:.*|  ea_registry_repo: null|" "$CONTEXT_YML"
+      sed -i.bak "s|^  ea_registry_authoritative:.*|  ea_registry_authoritative: false|" "$CONTEXT_YML"
+    fi
+    rm -f "${CONTEXT_YML}.bak"
+    success "context.yml updated (agent: $INSTR_FILENAME, EA registry: ${EA_REPO:-none})"
   fi
 
   echo ""
@@ -279,10 +321,10 @@ PYEOF
   success "Install complete."
   echo ""
   echo "  Next steps:"
-  echo "    1. Review .github/product/ and fill in your product context"
-  echo "    2. Review .github/standards/ and add your coding standards"
-  echo "    3. Open pipeline-viz.html in VS Code Live Preview"
-  echo "    4. Run /workflow in GitHub Copilot to start your first feature"
+  echo "    1. Fill in .github/product/ (mission, roadmap, tech-stack, constraints)"
+  echo "    2. Fill in .github/standards/ domain stubs with your rules"
+  echo "    3. Open pipeline-viz.html in browser (Live Server or file://)"
+  echo "    4. Run /workflow to start your first feature"
   echo ""
 fi
 
