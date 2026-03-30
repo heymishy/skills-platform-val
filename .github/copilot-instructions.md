@@ -262,6 +262,20 @@ Before closing a session:
 
 ---
 
+## Artefact writing standards
+
+**Do not hard-wrap prose paragraphs.** When writing markdown artefacts to disk, write each paragraph as a single unbroken line. Do not insert line breaks mid-sentence to fit a column width. Hard line breaks in prose look broken in VS Code and editors that do not soft-wrap.
+
+Rules:
+- Paragraphs: one line per paragraph, no mid-sentence `\n`
+- Lists: one item per line (that is intentional)
+- Tables: one row per line (that is intentional)
+- Headings: one line
+- Code blocks: fenced, content may wrap naturally
+- User story format (`As a … / I want … / So that …`): each clause on its own line is acceptable
+
+---
+
 ## Coding standards
 
 <!-- FILL IN: Repository-specific coding standards, architecture patterns, 
