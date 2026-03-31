@@ -6,6 +6,20 @@ All notable changes to this repository will be documented in this file.
 
 ---
 
+## [0.5.10] — 2026-04-01
+
+### Fixed
+
+#### Inner loop skills: parent propagation for epic status and feature staleness
+
+All 7 inner loop skills (`/branch-setup`, `/implementation-plan`, `/subagent-execution`, `/implementation-review`, `/verify-completion`, `/branch-complete`, `/tdd`) now include a **parent propagation** rule in their state update section:
+
+- **Feature `updatedAt`** is updated on every state write — prevents the viz staleness timer from showing "STALE PROC" when only story-level timestamps were being refreshed.
+- **Epic `status`** is recomputed from story states on every state write — set to `complete` when all stories are done, `in-progress` when any story has an active inner loop stage, `not-started` otherwise. Fixes the orange dot persisting on completed epics.
+- `/branch-setup` now also sets story-level `health` and `updatedAt` (previously only set story `stage`).
+
+---
+
 ## [0.5.9] — 2026-03-31
 
 ### Fixed
