@@ -6,6 +6,16 @@ All notable changes to this repository will be documented in this file.
 
 ---
 
+## [0.5.6] — 2026-03-31
+
+### Fixed
+
+#### Pipeline viz: TDD task links now open in the markdown viewer instead of the browser
+
+Task link anchors were missing the `drawer-link` CSS class. The `openMdViewer` click interceptor only fires on `a.drawer-link` elements, so task links fell through to normal browser navigation — opening the raw `.md` file in the Live Server tab. Added `drawer-link` to both the inline task list and drawer task list anchor elements so they are caught by the interceptor and open in the built-in markdown viewer like all other artefact links.
+
+---
+
 ## [0.5.5] — 2026-03-31
 
 ### Fixed
