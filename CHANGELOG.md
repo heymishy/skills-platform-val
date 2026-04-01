@@ -6,6 +6,22 @@ All notable changes to this repository will be documented in this file.
 
 ---
 
+## [0.5.12] — 2026-04-01
+
+### Improved
+
+#### Governance view: compact criteria, resolved artefact links, scope toggle
+
+Three UX improvements to the governance board based on first real-repo usage:
+
+**Gate criteria reference collapsed.** The full SKILL.md descriptions were dominating the view. Gate criteria now display as compact chips (gate name + skill badge) with the full description in a native tooltip on hover. The full card grid is still accessible via an "Expand full gate criteria descriptions" toggle below. Header shortened from "Gate Criteria Reference" to "Gate Criteria".
+
+**Artefact links resolve to files.** Gate status "artefact" links previously pointed to folders (`../artefacts/{slug}/review/`), which opened a directory listing rather than a readable file. They now resolve to the first story's specific artefact file (e.g. `{story-slug}-review-1.md`, `{story-slug}-test-plan.md`, `{story-slug}-dor.md`). Trace and release links were already file-specific and are unchanged.
+
+**Scope toggle: feature vs epic.** New "Scope: Feature / Epic" button in governance controls. Feature scope (default) shows one matrix row per feature — unchanged from before. Epic scope shows one row per epic, with the feature name prefixed (`Feature → Epic`). Gate status in epic scope evaluates only stories within that epic, giving finer-grained governance visibility without changing the underlying gate logic.
+
+---
+
 ## [0.5.11] — 2026-04-01
 
 ### Fixed
