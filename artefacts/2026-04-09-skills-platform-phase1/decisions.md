@@ -49,6 +49,15 @@
 ---
 
 ---
+**2026-04-09 | SCOPE | review-pre-check**
+**Decision:** Remove Epic 1 (Prototype Test Suite Stabilisation) and its two stories (`prototype-fix-s4-compilation`, `prototype-fix-s2-exit-code`) from the Phase 1 plan. Mark files as VOID.
+**Alternatives considered:** (A) Keep Epic 1 — would require fixing prototype failures that have no bearing on the skills repo's own test suite. Busywork with no metric trace. (B) Reframe Epic 1 as skills-repo stabilisation — there is no analogous failure in the skills repo; the epic has no valid target.
+**Rationale:** P1.3 (assurance CI gate) targets the skills repo, not the prototype repo. The platform is dogfooding itself — the CI gate runs on skills repo PRs (SKILL.md changes, new skills, standards updates). The prototype is a proof-of-concept that validated the three-agent pattern; it is not the governed artefact. The prototype's S4 compilation failure and S2 exit code failure have zero impact on the skills repo's test suite or on P1.3 delivery. The two RISK-ACCEPT entries in decisions.md were recorded correctly at discovery time against the prototype context, but the definition phase should have validated the dependency chain before writing the stories. Both RISK-ACCEPTs remain valid as prototype-context records; they are not resolved — they are superseded as P1.3 prerequisites.
+**Made by:** Hamish, 2026-04-09
+**Revisit trigger:** Not applicable — Epic 1 is void.
+---
+
+---
 **2026-04-09 | ARCH | benefit-metric**
 **Decision:** The `standardsInjected` array in the delivery trace is populated by the assurance agent at gate time, not by the dev agent at execution time.
 **Alternatives considered:** (A) Dev agent self-reports: records which standards governed its execution at runtime. Rejected — the dev agent is the governed party; it cannot be the verifier of its own governance context. Self-reporting erodes the independence property the assurance loop exists to provide. (B) Assurance agent populates at gate time: the independent verifier records what standards were in effect at the commit SHA of the PR. Consistent with the assurance agent's role.

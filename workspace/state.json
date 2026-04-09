@@ -19,17 +19,16 @@
       "status": "complete",
       "completedDate": "2026-04-09",
       "slicingStrategy": "risk-first",
-      "epicCount": 4,
-      "storyCount": 10,
+      "epicCount": 3,
+      "storyCount": 8,
+      "epicsVoided": ["artefacts/2026-04-09-skills-platform-phase1/epics/epic-1-prototype-stabilisation.md — VOID: target was prototype repo; P1.3 gates skills repo not prototype"],
+      "storiesVoided": ["artefacts/2026-04-09-skills-platform-phase1/stories/prototype-fix-s4-compilation.md", "artefacts/2026-04-09-skills-platform-phase1/stories/prototype-fix-s2-exit-code.md"],
       "epicsWritten": [
-        "artefacts/2026-04-09-skills-platform-phase1/epics/epic-1-prototype-stabilisation.md",
         "artefacts/2026-04-09-skills-platform-phase1/epics/epic-2-core-loop-infrastructure.md",
         "artefacts/2026-04-09-skills-platform-phase1/epics/epic-3-distribution-surface-model.md",
         "artefacts/2026-04-09-skills-platform-phase1/epics/epic-4-standards-eval-compliance.md"
       ],
       "storiesWritten": [
-        "artefacts/2026-04-09-skills-platform-phase1/stories/prototype-fix-s4-compilation.md",
-        "artefacts/2026-04-09-skills-platform-phase1/stories/prototype-fix-s2-exit-code.md",
         "artefacts/2026-04-09-skills-platform-phase1/stories/p1.5-workspace-state-session-continuity.md",
         "artefacts/2026-04-09-skills-platform-phase1/stories/p1.3-assurance-agent-ci-gate.md",
         "artefacts/2026-04-09-skills-platform-phase1/stories/p1.4-watermark-gate.md",
@@ -40,7 +39,7 @@
         "artefacts/2026-04-09-skills-platform-phase1/stories/p1.8-model-risk-documentation.md"
       ],
       "nfrProfile": "artefacts/2026-04-09-skills-platform-phase1/nfr-profile.md",
-      "scopeCheck": "passed — 10 stories covering 8 MVP items; 2 prototype fix stories are named discovery prerequisites, not scope additions; ratio 1.25",
+      "scopeCheck": "passed — 8 stories covering 8 MVP items; ratio 1.0; Epic 1 (2 prototype fix stories) voided 2026-04-09 — see decisions.md SCOPE entry",
       "coverageMatrix": "updated — all 8 metrics covered"
     },
     "stories": null,
@@ -55,6 +54,6 @@
       "prototype-fix-s2-exit-code.md: added prototype repo path + exact test command (tests/integration/s2-dev-agent-trace.integration.test.ts) + TODO for exit mechanism (grep found no process.exit(2) in source; likely tsc NFR check or implicit Node exit)"
     ],
     "learningsWritten": "workspace/learnings.md — definition phase gap: learnings not written at phase completion; 4 observations recorded",
-    "resumeInstruction": "Run /review. currentPhase is 'review'. All 10 stories are in artefacts/2026-04-09-skills-platform-phase1/stories/. Suggested review order: prototype-fix-s4-compilation → prototype-fix-s2-exit-code → p1.5-workspace-state-session-continuity → p1.3-assurance-agent-ci-gate → p1.4-watermark-gate → p1.1-distribution-progressive-disclosure → p1.2-surface-adapter-model-foundations → p1.6-living-eval-regression-suite → p1.7-standards-model-phase1 → p1.8-model-risk-documentation. Load .github/skills/review/SKILL.md first. Read workspace/state.json and this checkpoint block. The S2 story has one remaining TODO in Dependencies section — if operator resolves the exit code mechanism before /review starts, patch it first; otherwise /review will surface it as a targeted HIGH finding."
+    "resumeInstruction": "Run /review. currentPhase is 'review'. 8 active stories in artefacts/2026-04-09-skills-platform-phase1/stories/. Epic 1 and its 2 stories are VOID (see decisions.md SCOPE entry 2026-04-09). Suggested review order: p1.5-workspace-state-session-continuity → p1.3-assurance-agent-ci-gate → p1.4-watermark-gate → p1.1-distribution-progressive-disclosure → p1.2-surface-adapter-model-foundations → p1.6-living-eval-regression-suite → p1.7-standards-model-phase1 → p1.8-model-risk-documentation. Load .github/skills/review/SKILL.md first."
   }
 }

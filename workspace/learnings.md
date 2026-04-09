@@ -50,7 +50,26 @@ Platform dogfood signal log. One entry per metric measurement event. Populated d
 
 ---
 
-## Pipeline gap — /checkpoint threshold too late for file-read-heavy phases
+## Definition skill gap — prerequisite stories written without dependency chain validation
+
+### Observed — 2026-04-09
+
+**Circumstance:** Epic 1 (Prototype Test Suite Stabilisation) was written during `/definition` based on two RISK-ACCEPT entries in `decisions.md` from the discovery phase. The RISK-ACCEPTs stated that prototype test failures must be resolved before P1.3 can enter DoR. The definition skill accepted this as written and created two prerequisite stories.
+
+**What was wrong:** P1.3 (assurance CI gate) targets the skills repo, not the prototype repo. The platform is dogfooding itself — the CI gate runs on skills repo PRs. The prototype is a proof-of-concept that validated the three-agent pattern; its test failures have zero impact on the skills repo's test suite or P1.3 delivery. The two stories had no metric trace and no actual dependency on the target repository.
+
+**Root cause:** The definition skill did not validate the dependency chain before writing prerequisite stories. It read named prerequisites from discovery artefacts and wrote stories without asking: does each prerequisite story trace to a deliverable that traces to a metric in the target repository?
+
+**Proposed check for definition SKILL.md:** Before writing any prerequisite story flagged from discovery, verify:
+1. Does the prerequisite exist in the same target repository as the stories that depend on it?
+2. Does resolving the prerequisite trace to at least one metric in the benefit-metric artefact via a story that is in scope?
+3. If the prerequisite was flagged as a RISK-ACCEPT against a different codebase (e.g. a proof-of-concept repo), is that codebase actually the delivery target for this feature?
+
+If any check fails: flag to operator with a summary of the dependency chain gap before writing the story. Do not write the story on the assumption that the discovery artefact's named prerequisites are fully validated.
+
+**Resolution:** Epic 1 and both stories voided 2026-04-09. SCOPE decision recorded in `decisions.md`. Plan now 3 epics, 8 stories, scope ratio 1.0.
+
+**Action:** Add dependency chain validation check to `/definition` SKILL.md prerequisite story section. Flag for `/levelup` post-merge.
 
 ### Observed — 2026-04-09
 

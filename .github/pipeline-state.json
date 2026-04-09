@@ -14,15 +14,6 @@
       "updatedAt": "2026-04-09",
       "epics": [
         {
-          "slug": "epic-1-prototype-stabilisation",
-          "name": "Prototype Test Suite Stabilisation",
-          "status": "not-started",
-          "stories": [
-            { "slug": "prototype-fix-s4-compilation", "name": "Export computeEntryHash and detectEntryTampering from assurance-validator.ts", "stage": "definition", "health": "green" },
-            { "slug": "prototype-fix-s2-exit-code", "name": "Fix dev agent exit code on failing-criterion run (S2 integration AC5)", "stage": "definition", "health": "green" }
-          ]
-        },
-        {
           "slug": "epic-2-core-loop-infrastructure",
           "name": "Core Loop Infrastructure",
           "status": "not-started",

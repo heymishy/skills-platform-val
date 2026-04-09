@@ -1,3 +1,6 @@
+> **VOID — 2026-04-09**
+> Epic removed from plan. P1.3 (assurance CI gate) targets the skills repo, not the prototype repo. Prototype test failures have no dependency on the skills repo delivery. See decisions.md SCOPE entry 2026-04-09.
+
 # Epic: Prototype Test Suite Stabilisation
 
 **Discovery reference:** artefacts/2026-04-09-skills-platform-phase1/discovery.md

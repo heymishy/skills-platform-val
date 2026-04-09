@@ -151,7 +151,7 @@ This initiative is being dogfooded — the platform team runs the pipeline on it
 | Metric | Stories that move it | Coverage status |
 |--------|---------------------|-----------------|
 | M1 — Update channel latency | `p1.1-distribution-progressive-disclosure` | ✅ Covered |
-| M2 — CI-triggered assurance gate | `prototype-fix-s4-compilation`, `prototype-fix-s2-exit-code` (unblock DoR), `p1.3-assurance-agent-ci-gate` (direct delivery) | ✅ Covered |
+| M2 — CI-triggered assurance gate | `p1.3-assurance-agent-ci-gate` (direct delivery) | ✅ Covered |
 | M3 — Standards injection in trace | `p1.7-standards-model-phase1` (content), `p1.3-assurance-agent-ci-gate` (injection mechanism) | ✅ Covered |
 | M4 — Watermark gate blocks regression | `p1.6-living-eval-regression-suite` (suite content), `p1.4-watermark-gate` (direct delivery) | ✅ Covered |
 | MM1 — Solo operator outer loop | `p1.1-distribution-progressive-disclosure` (progressive disclosure), `p1.2-surface-adapter-model-foundations` (surface scoping), `p1.7-standards-model-phase1` (reduces blocking lookup at DoR), `p1.8-model-risk-documentation` (removes governance blocking lookup) | ✅ Covered |

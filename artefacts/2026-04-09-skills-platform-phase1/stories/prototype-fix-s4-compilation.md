@@ -1,3 +1,6 @@
+> **VOID — 2026-04-09**
+> Story removed from plan. Prototype compilation failure has no dependency on the skills repo delivery target. See decisions.md SCOPE entry 2026-04-09.
+
 # Story: Export computeEntryHash and detectEntryTampering from assurance-validator.ts
 
 **Epic reference:** artefacts/2026-04-09-skills-platform-phase1/epics/epic-1-prototype-stabilisation.md
