@@ -5,7 +5,9 @@
   "features": [
     {
       "slug": "2026-04-09-skills-platform-phase1",
+      "name": "Skills Platform — Phase 1 Foundation",
       "title": "Skills Platform — Phase 1 Foundation",
+      "track": "library",
       "stage": "definition-of-ready",
       "health": "green",
       "discoveryStatus": "approved",
