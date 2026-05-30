@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-05-30T14:39:08.492Z",
+  "generatedAt": "2026-05-30T15:33:27.276Z",
   "squads": [
     {
       "squadId": "squad-alpha",
       "stage": "unknown",
       "health": "unknown",
-      "updatedAt": "2026-05-30T14:39:08.492Z",
+      "updatedAt": "2026-05-30T15:33:27.276Z",
       "sourceUrl": "https://raw.githubusercontent.com/example-org/squad-alpha-repo/master/.github/pipeline-state.json",
       "error": "HTTP 404"
     },
@@ -13,7 +13,7 @@
       "squadId": "squad-beta",
       "stage": "unknown",
       "health": "unknown",
-      "updatedAt": "2026-05-30T14:39:08.492Z",
+      "updatedAt": "2026-05-30T15:33:27.276Z",
       "sourceUrl": "https://raw.githubusercontent.com/example-org/squad-beta-repo/master/.github/pipeline-state.json",
       "error": "HTTP 404"
     }
